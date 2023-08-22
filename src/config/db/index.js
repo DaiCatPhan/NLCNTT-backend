@@ -1,12 +1,19 @@
-import mongoose from "mongoose";
+const { Sequelize } = require("sequelize");
+
+// Option 3: Passing parameters separately (other dialects)
+const sequelize = new Sequelize("NL-CNTT", "root", "", {
+  host: "localhost",
+  dialect: "mysql",
+  logging: false,
+});
 
 async function connect() {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/NLCNTT");
-    console.log("Connect success ");
-  } catch (err) {
-    console.log("Connect fail !!!");
+    await sequelize.authenticate();
+    console.log("Connection successfully");
+  } catch (error) {
+    console.error("Connection fail ", error);
   }
 }
 
-export default {connect}
+export default { connect };
