@@ -111,65 +111,9 @@ class Authentication {
 
   //
 
-  // [POST] /authentication/register
-  // async register(req, res, next) {
-  //   const { email, password, username } = req.body;
-
-  //   if (!email || !password || !username) {
-  //     // 400 Lỗi bad request
-  //     return res.status(400).json({ err: 1, mes: "Chua truyen du tham so" });
-  //   }
-
-  //   try {
-  //     const userExited = await db.User.findOne({
-  //       raw: true,
-  //       where: { email: email },
-  //     });
-  //     if (userExited) {
-  //       return res
-  //         .status(200)
-  //         .json({ err: 2, mes: "Tài khoản đã tồn tại !!!" });
-  //     }
-  //     // Hash
-  //     const hash = await bcrypt.hash(password, 10);
-  //     if (hash) {
-  //       const userDoc = (
-  //         await db.User.create({
-  //           email,
-  //           password: hash,
-  //           username,
-  //         })
-  //       ).get({ plain: true });
-  //       if (userDoc) {
-  //         delete userDoc.password;
-  //         return res
-  //           .status(200)
-  //           .json({ err: 3, mes: "Success", data: userDoc });
-  //       } else {
-  //         return res
-  //           .status(401)
-  //           .json({ err: 4, mes: "Tao tai khoan that bai !" });
-  //       }
-  //     } else {
-  //       return res.status(402).json({ err: 5, mes: "Hash pass fail !!" });
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //     return res.status(500).json({ err: 6, mes: "Loi server" });
-  //   }
-  // }
-
   //
   async getPost(req, res, next) {
-    const postData = await db.Post.findAll({
-      include: [
-        {
-          model: db.User,
-        },
-      ],
-    });
-
-    return res.json(postData);
+    
   }
 }
 
