@@ -7,9 +7,10 @@ var privateKey = "sadfdsdf";
 class Authentication {
   // [POST] /authentication/register
   async register(req, res, next) {
-    const { email, password, username, phone } = req.body;
+    const { email, password, username } = req.body;
 
-    if (!email || !password || !username || !phone) {
+
+    if (!email || !password || !username ) {
       // 400 Lỗi bad request
       return res.status(400).json({ err: 1, mes: "Chua truyen du tham so" });
     }
@@ -32,7 +33,6 @@ class Authentication {
             email,
             password: hash,
             username,
-            phone,
           })
         ).get({ plain: true });
         if (userDoc) {

@@ -13,6 +13,7 @@ module.exports = {
       lastName: { type: Sequelize.STRING },
       email: { type: Sequelize.STRING },
       avatar: { type: Sequelize.STRING },
+      avatartaaaaa: { type: Sequelize.STRING },
       createdAt: { allowNull: false, type: Sequelize.DATE },
       updatedAt: { allowNull: false, type: Sequelize.DATE },
     });
