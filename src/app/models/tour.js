@@ -9,19 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-       
     }
   }
   Tour.init(
     {
-      nameTour: DataTypes.STRING,
-      urlTour: DataTypes.STRING,
-      typeTour: DataTypes.STRING,
-      priceTour: DataTypes.STRING,
-      contentTour: DataTypes.STRING,
-      durationTour: DataTypes.STRING,
-      dayStart: DataTypes.STRING,
-      dayEnd: DataTypes.STRING,
+      name: DataTypes.STRING,
+      price: DataTypes.STRING,
+      type: DataTypes.STRING,
+      duration: DataTypes.STRING,
+      content: DataTypes.STRING,
+      description: DataTypes.STRING,
+      domain: DataTypes.STRING,
+      image: DataTypes.STRING,
     },
     {
       sequelize,

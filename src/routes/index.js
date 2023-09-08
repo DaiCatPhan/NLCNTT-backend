@@ -1,10 +1,11 @@
 import authenticationRouter from "./authentication";
-import  tourRouter from "./tour";
+import tourRouter from "./tour";
 
 function route(app) {
+  // Tour
+  app.use("/api/v1/tour", tourRouter);
 
   // authentication
-  app.use("/tour", tourRouter);
   app.use("/authentication", authenticationRouter);
 }
 
