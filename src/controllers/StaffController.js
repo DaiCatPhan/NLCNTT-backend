@@ -1,6 +1,6 @@
-import e from "express";
 import db from "../app/models";
 import bcrypt from "bcrypt";
+import { UserServices } from "../services";
 
 class Staff {
   // [POST] /api/v1/staff/deleteStaff/:id
@@ -117,6 +117,19 @@ class Staff {
   // [GET] /api/v1/staff/getStaff
   async getStaff(req, res, next) {
     res.json("getStaff");
+  }
+
+  // [GET] /api/v1/staff/getStaff
+  async getListPaginationStaff(req, res, next) {
+    // const { offset, limit } = req.query;
+    const offset = Number(req.query.offset) || 0;
+    const limit = Number(req.query.limit) || 10;
+    try {
+      const result = await UserServices.getUserPagination({ offset, limit });
+      res.json(result);
+    } catch (err) {
+      res.status(500).json(err.message);
+    }
   }
 }
 
