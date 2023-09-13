@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { UserServices } from "../services";
 
 class Staff {
-  // [POST] /api/v1/staff/deleteStaff/:id
+  // [DELETE] /api/v1/staff/deleteStaff/:id
   async deleteStaff(req, res, next) {
     try {
       const idStaff = req.params.idStaff;
@@ -11,17 +11,24 @@ class Staff {
       if (!exitStaff) {
         return res.status(200).json("Tài khoản không tồn tại");
       }
-      const deleteStaff = await db.Staff.destroy({
+      const delUser = await db.Staff.destroy({
         where: {
           id: idStaff,
         },
       });
-      res.json("Deleted Successfuly");
+
+      if (delUser == 1) {
+        return res
+          .status(204)
+          .json({ sta: "Success", mes: "Xóa tài khoản thành công " });
+      } else {
+        return res.json("Xóa tài khoản thất bại !!!");
+      }
     } catch (err) {
       res.status(500).json(err);
     }
   }
-  // [POST] /api/v1/staff/updateStaff/:id
+  // [PUT] /api/v1/staff/updateStaff/:id
   async updateStaff(req, res, next) {
     try {
       const idStaff = req.params.idStaff;
@@ -49,9 +56,12 @@ class Staff {
         return res.status(200).json({ mes: "Cập nhật thất bại !!!" });
       }
 
-      return res
-        .status(200)
-        .json({ code: 2, sta: "Success", mes: "Cập nhật thành công" });
+      return res.status(200).json({
+        code: 2,
+        sta: "Success",
+        mes: "Cập nhật thành công",
+        data: updateStaff,
+      });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -76,9 +86,7 @@ class Staff {
       });
 
       if (isExit) {
-        return res
-          .status(200)
-          .json({ sta: "Success", mes: "Account already exits" });
+        return res.status(200).json({ mes: "Account already exits" });
       }
 
       // Băm mật khẩu ra bcrypt
@@ -96,11 +104,10 @@ class Staff {
         });
 
         if (!Staff) {
-          return res
-            .status(200)
-            .json({ sta: "Success", mes: "Account creation failed" });
+          return res.status(200).json({ mes: "Account creation failed" });
         } else {
-          return res.status(200).json({
+          return res.status(201).json({
+            code: 201,
             sta: "Success",
             mes: "Account successfully created",
             data: Staff,
