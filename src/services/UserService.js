@@ -8,6 +8,9 @@ class UserServices {
     });
     return result;
   }
+
+
+  
 }
 
 export default new UserServices();
