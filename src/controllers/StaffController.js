@@ -1,6 +1,6 @@
 import db from "../app/models";
 import bcrypt from "bcrypt";
-import { UserServices } from "../services";
+import UserServices from "../services/UserService";
 
 class Staff {
   // [DELETE] /api/v1/staff/deleteStaff/:id
@@ -136,6 +136,75 @@ class Staff {
       res.json(result);
     } catch (err) {
       res.status(500).json(err.message);
+    }
+  }
+
+  // ===================== TEST==========================
+  async readFunc(req, res) {
+    try {
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
+    }
+  }
+
+  async createFunc(req, res) {
+    try {
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
+    }
+  }
+
+  async updateFunc(req, res) {
+    try {
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
+    }
+  }
+
+  async deleteFunc(req, res) {
+    try {
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
     }
   }
 }

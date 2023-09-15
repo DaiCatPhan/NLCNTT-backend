@@ -118,7 +118,7 @@ const handleUserLogin = async (rawData) => {
       // user == null
       console.log("Không tìm thấy Người dùng !!!");
       return {
-        EM: "Email / SDT hoặc password không đúng !!!",
+        EM: "Email / SDT  không đúng !!!",
         EC: -2,
         DT: "",
       };

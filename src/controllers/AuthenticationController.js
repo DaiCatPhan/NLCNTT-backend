@@ -30,6 +30,7 @@ class Authentication {
         EC: data.EC,
         DT: data.DT,
       });
+      
     } catch (err) {
       console.log("err <<< ", err);
       return res.status(500).json({
