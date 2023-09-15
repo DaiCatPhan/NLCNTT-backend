@@ -1,6 +1,7 @@
 import { Model } from "sequelize";
 import db from "../app/models";
 import bcrypt, { genSaltSync } from "bcrypt";
+import { Op } from "sequelize";
 
 //
 const salt = genSaltSync(10);
@@ -8,6 +9,10 @@ const salt = genSaltSync(10);
 const hashUserPassword = (userPassword) => {
   let hashPassword = bcrypt.hashSync(userPassword, salt);
   return hashPassword;
+};
+
+const checkPassword = (inputPassword, hashPassword) => {
+  return bcrypt.compare(inputPassword, hashPassword);
 };
 
 const checkEmailExist = async (userEmail) => {
@@ -45,6 +50,7 @@ const registerNewUser = async (rawUserData) => {
       return {
         EM: "Email đã tồn tại !!!",
         EC: 1,
+        DT: "",
       };
     }
 
@@ -52,6 +58,7 @@ const registerNewUser = async (rawUserData) => {
       return {
         EM: "Số điện thoại đã tồn tại !!!",
         EC: 1,
+        DT: "",
       };
     }
 
@@ -80,4 +87,50 @@ const registerNewUser = async (rawUserData) => {
   }
 };
 
-module.exports = { registerNewUser };
+const handleUserLogin = async (rawData) => {
+  try {
+    let user = await db.Staff.findOne({
+      where: {
+        [Op.or]: [{ email: rawData.valueLogin }, { phone: rawData.valueLogin }],
+      },
+    });
+
+    if (user) {
+      let isCorrectPassword = await checkPassword(
+        rawData.password,
+        user.password
+      );
+      if (isCorrectPassword === true) {
+        return {
+          EM: "ok",
+          EC: 0,
+          DT: user,
+        };
+      } else {
+        console.log("Mật khẩu sai !!!");
+        return {
+          EM: " Mật khẩu sai !!!",
+          EC: -2,
+          DT: "",
+        };
+      }
+    } else {
+      // user == null
+      console.log("Không tìm thấy Người dùng !!!");
+      return {
+        EM: "Email / SDT hoặc password không đúng !!!",
+        EC: -2,
+        DT: "",
+      };
+    }
+  } catch (err) {
+    console.log(err);
+    return {
+      EM: "Loi server !!!",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+module.exports = { registerNewUser, handleUserLogin };
