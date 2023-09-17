@@ -2,11 +2,27 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import AuthenticaitonService from "../services/AuthenticaitonService";
+import "dotenv/config";
 
 import db from "../app/models";
 var privateKey = "sadfdsdf";
 
 class Authentication {
+  //
+  async getProfile(req, res) {
+    const token = req.cookies.token;
+    if (!token) {
+      res.json("NGuoi dung ch dang nhap");
+    }
+    try {
+      const dataUser = jwt.verify(token, process.env.JWT_KEY);
+      res.json(dataUser);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ err: "Loi server" });
+    }
+  }
+
   // [POST] /api/v1/authentication/login
   async handlelogin(req, res, next) {
     try {
@@ -25,12 +41,17 @@ class Authentication {
         password,
       });
 
-      return res.status(200).json({
-        EM: data.EM,
-        EC: data.EC,
-        DT: data.DT,
-      });
-      
+      if (data.EC === 0) {
+        return res
+          .cookie("token", data.DT, { sameSite: "none", secure: true })
+          .json({ EC: 0, EM: "Login successfully!!", DT: data.DT });
+      }
+
+      // return res.status(200).json({
+      //   EM: data.EM,
+      //   EC: data.EC,
+      //   DT: data.DT,
+      // });
     } catch (err) {
       console.log("err <<< ", err);
       return res.status(500).json({

@@ -2,8 +2,9 @@ import { Model } from "sequelize";
 import db from "../app/models";
 import bcrypt, { genSaltSync } from "bcrypt";
 import { Op } from "sequelize";
+import jwt from "jsonwebtoken";
+import "dotenv/config";
 
-//
 const salt = genSaltSync(10);
 
 const hashUserPassword = (userPassword) => {
@@ -70,6 +71,7 @@ const registerNewUser = async (rawUserData) => {
       email: rawUserData.email,
       name: rawUserData.name,
       phone: rawUserData.phone,
+      role: 'khachhang',  
       gender: rawUserData.gender,
       password: hashPassword,
     });
@@ -95,30 +97,40 @@ const handleUserLogin = async (rawData) => {
       },
     });
 
-    if (user) {
-      let isCorrectPassword = await checkPassword(
-        rawData.password,
-        user.password
-      );
-      if (isCorrectPassword === true) {
-        return {
-          EM: "ok",
-          EC: 0,
-          DT: user,
-        };
-      } else {
-        console.log("Mật khẩu sai !!!");
-        return {
-          EM: " Mật khẩu sai !!!",
-          EC: -2,
-          DT: "",
-        };
-      }
-    } else {
-      // user == null
+    if (user === null) {
       console.log("Không tìm thấy Người dùng !!!");
       return {
         EM: "Email / SDT  không đúng !!!",
+        EC: -2,
+        DT: "",
+      };
+    }
+
+    let isCorrectPassword = await checkPassword(
+      rawData.password,
+      user.password
+    );
+
+    if (isCorrectPassword === true) {
+      let tokentData = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      };
+      const token = jwt.sign(tokentData, process.env.JWT_KEY);
+      
+      return {
+        EM: "ok",
+        EC: 0,
+        DT: token,
+      };
+
+      // Tiếp tục
+    } else {
+      console.log("Mật khẩu sai !!!");
+      return {
+        EM: " Mật khẩu sai !!!",
         EC: -2,
         DT: "",
       };
