@@ -15,7 +15,7 @@ class Authentication {
       res.json("NGuoi dung ch dang nhap");
     }
     try {
-      const dataUser = jwt.verify(token, process.env.JWT_KEY);
+      const dataUser = jwt.verify(token, process.env.JWT_KEY); 
       res.json(dataUser);
     } catch (err) {
       console.log(err);
@@ -47,11 +47,11 @@ class Authentication {
           .json({ EC: 0, EM: "Login successfully!!", DT: data.DT });
       }
 
-      // return res.status(200).json({
-      //   EM: data.EM,
-      //   EC: data.EC,
-      //   DT: data.DT,
-      // });
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
     } catch (err) {
       console.log("err <<< ", err);
       return res.status(500).json({

@@ -71,7 +71,7 @@ const registerNewUser = async (rawUserData) => {
       email: rawUserData.email,
       name: rawUserData.name,
       phone: rawUserData.phone,
-      role: 'khachhang',  
+      role: "khachhang",
       gender: rawUserData.gender,
       password: hashPassword,
     });
@@ -119,7 +119,7 @@ const handleUserLogin = async (rawData) => {
         role: user.role,
       };
       const token = jwt.sign(tokentData, process.env.JWT_KEY);
-      
+
       return {
         EM: "ok",
         EC: 0,
@@ -128,7 +128,6 @@ const handleUserLogin = async (rawData) => {
 
       // Tiếp tục
     } else {
-      console.log("Mật khẩu sai !!!");
       return {
         EM: " Mật khẩu sai !!!",
         EC: -2,
@@ -136,7 +135,7 @@ const handleUserLogin = async (rawData) => {
       };
     }
   } catch (err) {
-    console.log(err);
+    console.log(">>> err", err);
     return {
       EM: "Loi server !!!",
       EC: -2,
