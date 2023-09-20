@@ -1,14 +1,14 @@
 import { Model } from "sequelize";
+import jwt from "jsonwebtoken";
 import db from "../app/models";
 import bcrypt, { genSaltSync } from "bcrypt";
 import { Op } from "sequelize";
-import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 const salt = genSaltSync(10);
 
-const hashUserPassword = (userPassword) => {
-  let hashPassword = bcrypt.hashSync(userPassword, salt);
+const hashUserPassword = async (userPassword) => {
+  let hashPassword = await bcrypt.hashSync(userPassword, salt);
   return hashPassword;
 };
 

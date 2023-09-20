@@ -1,10 +1,11 @@
 import db from "../app/models";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import UserService from "../services/UserService";
 
 class Staff {
-  // [GET] /api/v1/staff/read 
+  // [GET] /api/v1/staff/read
   async readFunc(req, res) {
     try {
       if (req.query.page && req.query.limit) {
@@ -32,6 +33,7 @@ class Staff {
   async createFunc(req, res) {
     try {
       let inputData = req.body;
+
       let data = await UserService.createNewUser(inputData);
       return res.status(200).json({
         EM: data.EM,
@@ -58,7 +60,7 @@ class Staff {
         EM: data.EM,
         EC: data.EC,
         DT: data.DT,
-      }); 
+      });
     } catch (err) {
       console.log("err <<< ", err);
       return res.status(500).json({

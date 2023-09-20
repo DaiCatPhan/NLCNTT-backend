@@ -1,25 +1,21 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import AuthenticaitonService from "../services/AuthenticaitonService";
 import "dotenv/config";
 
-import db from "../app/models";
-var privateKey = "sadfdsdf";
-
 class Authentication {
   //
   async getProfile(req, res) {
-    const token = req.cookies.token;
-    if (!token) {
-      res.json("NGuoi dung ch dang nhap");
-    }
     try {
-      const dataUser = jwt.verify(token, process.env.JWT_KEY); 
-      res.json(dataUser);
+      const token = req.cookies.token;
+      if (!token) {
+        return res.json("NGuoi dung ch dang nhap");
+      }
+      const dataUser = await jwt.verify(token, process.env.JWT_KEY);
+      return res.status(200).json(dataUser);
     } catch (err) {
-      console.log(err);
-      return res.status(500).json({ err: "Loi server" });
+      console.log("err <<< ", err);
+      return res.status(500).json({ err: err });
     }
   }
 

@@ -2,8 +2,8 @@ import db from "../app/models";
 import bcrypt, { genSaltSync } from "bcrypt";
 const salt = genSaltSync(10);
 
-const hashUserPassword = (userPassword) => {
-  let hashPassword = bcrypt.hashSync(userPassword, salt);
+const hashUserPassword = async (userPassword) => {
+  let hashPassword = await bcrypt.hashSync(userPassword, salt);
   return hashPassword;
 };
 
@@ -44,7 +44,7 @@ const checkIdExist = async (userId) => {
 };
 
 // ===================== CRUD =========================
-const getUserWithPagination = async ({ page, limit }) => {
+const getUserWithPagination = async ({ page = 1, limit = 3 }) => {
   try {
     let offset = (page - 1) * limit;
 
@@ -103,7 +103,7 @@ const createNewUser = async (rawUserData) => {
     if (isEmailExitst === true) {
       return {
         EM: "Email đã tồn tại !!!",
-        EC: 1,
+        EC: -1,
         DT: "",
       };
     }
@@ -111,15 +111,16 @@ const createNewUser = async (rawUserData) => {
     if (isPhoneExitst === true) {
       return {
         EM: "Số điện thoại đã tồn tại !!!",
-        EC: 1,
+        EC: -2,
         DT: "",
       };
     }
 
     // B2
-    let hashPassword = hashUserPassword(rawUserData.password);
+    let hashPassword = await hashUserPassword(rawUserData.password);
 
     // B3
+
     let userNewData = await db.Staff.create({
       email: rawUserData.email,
       name: rawUserData.name,
@@ -135,7 +136,8 @@ const createNewUser = async (rawUserData) => {
       DT: userNewData,
     };
   } catch (err) {
-    console.log(err);
+    console.log("err <<<>>> ", err);
+
     return {
       EM: "Loi server !!!",
       EC: -2,
