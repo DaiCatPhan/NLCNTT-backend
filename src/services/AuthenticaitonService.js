@@ -7,8 +7,8 @@ import "dotenv/config";
 
 const salt = genSaltSync(10);
 
-const hashUserPassword = async (userPassword) => {
-  let hashPassword = await bcrypt.hashSync(userPassword, salt);
+const hashUserPassword = (userPassword) => {
+  let hashPassword = bcrypt.hashSync(userPassword, salt);
   return hashPassword;
 };
 
@@ -81,7 +81,7 @@ const registerNewUser = async (rawUserData) => {
       EC: 0,
     };
   } catch (err) {
-    console.log(err);
+    console.log(">>> err ", err);
     return {
       EM: "Loi server !!!",
       EC: -2,
@@ -123,7 +123,10 @@ const handleUserLogin = async (rawData) => {
       return {
         EM: "ok",
         EC: 0,
-        DT: token,
+        DT: {
+          token,
+          tokentData,
+        },
       };
 
       // Tiếp tục

@@ -39,7 +39,7 @@ class Authentication {
 
       if (data.EC === 0) {
         return res
-          .cookie("token", data.DT, { sameSite: "none", secure: true })
+          .cookie("token", data.DT.token, { sameSite: "none", secure: true })
           .json({ EC: 0, EM: "Login successfully!!", DT: data.DT });
       }
 
@@ -62,19 +62,18 @@ class Authentication {
   async handleRegister(req, res, next) {
     try {
       const { email, name, phone, gender, password } = req.body;
-
       // Validate
       if (!email || !name || !phone || !gender || !password) {
         return res.status(200).json({
           EM: "Nhập thiếu dữ liệu !!!",
-          EC: "1",
+          EC: "-1",
           DT: "",
         });
       }
       if (password && password.length < 5) {
         return res.status(200).json({
           EM: "Mật khẩu phải có ít nhất 5 ký tự ",
-          EC: "1",
+          EC: "-2",
           DT: "",
         });
       }
@@ -89,7 +88,7 @@ class Authentication {
     } catch (err) {
       return res.status(500).json({
         EM: "error server", // error message
-        EC: "-1", // error code
+        EC: "-5", // error code
         DT: "", // data
       });
     }
