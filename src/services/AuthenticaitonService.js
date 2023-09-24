@@ -17,7 +17,7 @@ const checkPassword = (inputPassword, hashPassword) => {
 };
 
 const checkEmailExist = async (userEmail) => {
-  let user = await db.Staff.findOne({
+  let user = await db.Customer.findOne({
     where: {
       email: userEmail,
     },
@@ -29,7 +29,7 @@ const checkEmailExist = async (userEmail) => {
 };
 
 const checkPhoneExist = async (phoneEmail) => {
-  let user = await db.Staff.findOne({
+  let user = await db.Customer.findOne({
     where: {
       phone: phoneEmail,
     },
@@ -67,11 +67,11 @@ const registerNewUser = async (rawUserData) => {
     let hashPassword = hashUserPassword(rawUserData.password);
 
     // B3
-    await db.Staff.create({
+    await db.Customer.create({
       email: rawUserData.email,
       name: rawUserData.name,
       phone: rawUserData.phone,
-      role: "khachhang",
+      role: "Khachhang",
       gender: rawUserData.gender,
       password: hashPassword,
     });
@@ -89,18 +89,41 @@ const registerNewUser = async (rawUserData) => {
   }
 };
 
-const handleUserLogin = async (rawData) => {
-  try {
-    let user = await db.Staff.findOne({
+const checkUserLogin = async (valueLogin) => {
+  let user = null;
+  user = await db.Staff.findOne({
+    where: {
+      email: valueLogin,
+    },
+  });
+
+  if (user === null) {
+    user = await db.Customer.findOne({
       where: {
-        [Op.or]: [{ email: rawData.valueLogin }, { phone: rawData.valueLogin }],
+        email: valueLogin,
       },
     });
+  }
+
+  return user;
+};
+
+const handleUserLogin = async (rawData) => {
+  try {
+    let user = await checkUserLogin(rawData.valueLogin);
+
+    // let user = await db.Staff.findOne({
+    //   where: {
+    //     [Op.or]: [
+    //       { email: rawData.valueLogin },
+    //       { phone: rawData.valueLogin },
+    //     ],
+    //   },
+    // });
 
     if (user === null) {
-      console.log("Không tìm thấy Người dùng !!!");
       return {
-        EM: "Email / SDT  không đúng !!!",
+        EM: "Email  không đúng !!!",
         EC: -2,
         DT: "",
       };

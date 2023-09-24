@@ -2,7 +2,7 @@ import db from "../app/models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import UserService from "../services/UserService";
+import StaffService from "../services/StaffService";
 
 class Staff {
   // [GET] /api/v1/staff/read
@@ -12,7 +12,7 @@ class Staff {
         let page = +req.query.page;
         let limit = +req.query.limit;
 
-        let data = await UserService.getUserWithPagination({ page, limit });
+        let data = await StaffService.getUserWithPagination({ page, limit });
         return res.status(200).json({
           EM: data.EM,
           EC: data.EC,
@@ -34,7 +34,7 @@ class Staff {
     try {
       let inputData = req.body;
 
-      let data = await UserService.createNewUser(inputData);
+      let data = await StaffService.createNewUser(inputData);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,
@@ -55,7 +55,7 @@ class Staff {
     try {
       let dataUpdateInput = req.body;
 
-      let data = await UserService.updateUser(dataUpdateInput);
+      let data = await StaffService.updateUser(dataUpdateInput);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,
@@ -76,7 +76,7 @@ class Staff {
     try {
       let idUser = req.body.id;
 
-      let data = await UserService.deleteUser(idUser);
+      let data = await StaffService.deleteUser(idUser);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,

@@ -98,7 +98,7 @@ const createNewUser = async (rawUserData) => {
   try {
     // B1
     let isEmailExitst = await checkEmailExist(rawUserData.email);
-    let isPhoneExitst = await checkPhoneExist(rawUserData.phone); 
+    let isPhoneExitst = await checkPhoneExist(rawUserData.phone);
 
     if (isEmailExitst === true) {
       return {
