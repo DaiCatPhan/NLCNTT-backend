@@ -92,7 +92,7 @@ const getAllUser = async (data) => {
       DT: data,
     };
   }
-};
+}; 
 
 const createNewUser = async (rawUserData) => {
   try {

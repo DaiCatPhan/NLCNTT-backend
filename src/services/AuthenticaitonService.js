@@ -110,7 +110,7 @@ const checkUserLogin = async (valueLogin) => {
 
 const handleUserLogin = async (rawData) => {
   try {
-    let user = await checkUserLogin(rawData.valueLogin);
+    let user = await checkUserLogin(rawData.valueLogin); 
 
     // let user = await db.Staff.findOne({
     //   where: {
