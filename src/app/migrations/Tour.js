@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.createTable("Tours", {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        autoIncrement: true, 
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
@@ -16,7 +16,6 @@ module.exports = {
       content: { type: Sequelize.STRING },
       description: { type: Sequelize.STRING },
       domain: { type: Sequelize.STRING },
-      image: { type: Sequelize.STRING },
     });
   },
   async down(queryInterface, Sequelize) {
