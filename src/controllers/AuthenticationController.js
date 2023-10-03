@@ -11,7 +11,7 @@ class Authentication {
       if (!token) {
         return res.json("NGuoi dung ch dang nhap");
       }
-      const dataUser = await jwt.verify(token, process.env.JWT_KEY);
+      const dataUser = jwt.verify(token, process.env.JWT_KEY);
       return res.status(200).json(dataUser);
     } catch (err) {
       console.log("err <<< ", err);
@@ -22,18 +22,18 @@ class Authentication {
   // [POST] /api/v1/authentication/login
   async handlelogin(req, res, next) {
     try {
-      const { valueLogin, password } = req.body;
+      const { email, password } = req.body;
 
-      if (!valueLogin || !password) {
+      if (!email || !password) {
         return res.status(200).json({
-          EM: "Nhập thiếu dữ liệu !!!",
+          EM: "Nhập thiếu dữ liệu !!!",  
           EC: "1",
           DT: "",
         });
       }
 
       let data = await AuthenticaitonService.handleUserLogin({
-        valueLogin,
+        email,
         password,
       });
 
@@ -61,19 +61,12 @@ class Authentication {
   // [POST] /api/v1/authentication/register
   async handleRegister(req, res, next) {
     try {
-      const { email, name, phone, gender, password } = req.body;
+      const { email, name, gender, password } = req.body;
       // Validate
-      if (!email || !name || !phone || !gender || !password) {
+      if (!email || !name || !gender || !password) {
         return res.status(200).json({
           EM: "Nhập thiếu dữ liệu !!!",
           EC: "-1",
-          DT: "",
-        });
-      }
-      if (password && password.length < 5) {
-        return res.status(200).json({
-          EM: "Mật khẩu phải có ít nhất 5 ký tự ",
-          EC: "-2",
           DT: "",
         });
       }

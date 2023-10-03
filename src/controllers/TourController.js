@@ -1,11 +1,12 @@
 import db from "../app/models";
+import TourService from "../services/TourService";
 
 class Tour {
   getTour(req, res, next) {
     res.json("getTour");
   }
 
-  upLoadTour(req, res, next) {
+  upDateTour(req, res, next) {
     res.json("upLoadTour");
   }
 
@@ -21,30 +22,56 @@ class Tour {
         price,
         type,
         duration,
-        content,
         description,
         domain,
         image,
+        vehicel,
       } = req.body;
 
-      const tour = await db.Tour.create({
-        name: name,
-        price: price,
-        type: type,
-        duration: duration,
-        content: content,
-        description: description,
-        domain: domain,
-        image: image,
-      });
-
-      if (!tour) {
-        return res.status(400).json({ mes: "Create du lieu that bai" });
+      // Validate
+      if (
+        !name ||
+        !price ||
+        !type ||
+        !duration ||
+        !description ||
+        !domain ||
+        !image ||
+        !vehicel
+      ) {
+        return res.status(200).json({
+          EM: "Nhập thiếu trường dữ liệu !!!",
+          EC: -2,
+          DT: "",
+        });
       }
 
-      return res.status(400).json({ mes: "Success", data: tour });
+      const reqDataNewTour = {
+        name,
+        price,
+        type,
+        duration,
+        description,
+        domain,
+        image,
+        vehicel,
+      };
+
+
+      const data = await TourService.createTour(reqDataNewTour);
+
+      res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
     } catch (err) {
-      return res.status(500).json({ err: 5, mes: "Loi server" });
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
     }
   }
 

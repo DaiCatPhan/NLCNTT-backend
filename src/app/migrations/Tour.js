@@ -5,17 +5,18 @@ module.exports = {
     await queryInterface.createTable("Tours", {
       id: {
         allowNull: false,
-        autoIncrement: true, 
+        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
       name: { type: Sequelize.STRING },
       price: { type: Sequelize.STRING },
       type: { type: Sequelize.STRING },
-      duration: { type: Sequelize.STRING },
-      content: { type: Sequelize.STRING },
+      duration: { type: Sequelize.STRING }, 
       description: { type: Sequelize.STRING },
       domain: { type: Sequelize.STRING },
+      image: { type: Sequelize.STRING },
+      vehicel: { type: Sequelize.STRING },  
     });
   },
   async down(queryInterface, Sequelize) {

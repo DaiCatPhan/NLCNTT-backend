@@ -17,27 +17,26 @@ const checkPassword = (inputPassword, hashPassword) => {
 };
 
 const checkEmailExist = async (userEmail) => {
-  let user = await db.Customer.findOne({
+  let user = null;
+
+  user = await db.Staff.findOne({
     where: {
       email: userEmail,
     },
   });
-  if (user) {
-    return true;
-  }
-  return false; // Email khong ton tai !
-};
 
-const checkPhoneExist = async (phoneEmail) => {
-  let user = await db.Customer.findOne({
-    where: {
-      phone: phoneEmail,
-    },
-  });
-  if (user) {
-    return true;
+  if (user === null) {
+    user = await db.Customer.findOne({
+      where: {
+        email: userEmail,
+      },
+    });
   }
-  return false; // Email khong ton tai !
+
+  if (user === null) {
+    return false;
+  }
+  return true; //  Email có tồn tại
 };
 
 const registerNewUser = async (rawUserData) => {
@@ -45,20 +44,11 @@ const registerNewUser = async (rawUserData) => {
   try {
     // B1
     let isEmailExitst = await checkEmailExist(rawUserData.email);
-    let isPhoneExitst = await checkPhoneExist(rawUserData.phone);
 
     if (isEmailExitst === true) {
       return {
         EM: "Email đã tồn tại !!!",
-        EC: 1,
-        DT: "",
-      };
-    }
-
-    if (isPhoneExitst === true) {
-      return {
-        EM: "Số điện thoại đã tồn tại !!!",
-        EC: 1,
+        EC: -1,
         DT: "",
       };
     }
@@ -70,8 +60,7 @@ const registerNewUser = async (rawUserData) => {
     await db.Customer.create({
       email: rawUserData.email,
       name: rawUserData.name,
-      phone: rawUserData.phone,
-      role: "Khachhang",
+      role: "khachhang",
       gender: rawUserData.gender,
       password: hashPassword,
     });
@@ -89,12 +78,13 @@ const registerNewUser = async (rawUserData) => {
   }
 };
 
-const checkUserLogin = async (valueLogin) => {
+const getUserLogin = async (valueLogin) => {
   let user = null;
   user = await db.Staff.findOne({
     where: {
       email: valueLogin,
     },
+    raw: true,
   });
 
   if (user === null) {
@@ -102,6 +92,7 @@ const checkUserLogin = async (valueLogin) => {
       where: {
         email: valueLogin,
       },
+      raw: true,
     });
   }
 
@@ -110,20 +101,13 @@ const checkUserLogin = async (valueLogin) => {
 
 const handleUserLogin = async (rawData) => {
   try {
-    let user = await checkUserLogin(rawData.valueLogin); 
+    let user = await getUserLogin(rawData.email);
 
-    // let user = await db.Staff.findOne({
-    //   where: {
-    //     [Op.or]: [
-    //       { email: rawData.valueLogin },
-    //       { phone: rawData.valueLogin },
-    //     ],
-    //   },
-    // });
+    console.log(">> check user", user);
 
     if (user === null) {
       return {
-        EM: "Email  không đúng !!!",
+        EM: "Email không đúng !!!",
         EC: -2,
         DT: "",
       };

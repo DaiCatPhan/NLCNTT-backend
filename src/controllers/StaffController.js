@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import StaffService from "../services/StaffService";
 
 class Staff {
-  // [GET] /api/v1/staff/read
+  // [GET] /api/v1/staff/read 
   async readFunc(req, res) {
     try {
       if (req.query.page && req.query.limit) {
@@ -34,6 +34,22 @@ class Staff {
     try {
       let inputData = req.body;
 
+      // check điều kiện :
+      if (
+        !inputData.name ||
+        !inputData.gender ||
+        !inputData.role ||
+        !inputData.email ||
+        !inputData.password ||
+        !inputData.phone
+      ) {
+        return {
+          EM: "Nhập thiếu dữ liệu",
+          EC: -2,
+          DT: "",
+        };
+      }
+
       let data = await StaffService.createNewUser(inputData);
       return res.status(200).json({
         EM: data.EM,
@@ -54,6 +70,22 @@ class Staff {
   async updateFunc(req, res) {
     try {
       let dataUpdateInput = req.body;
+
+
+      if (
+        !dataUpdateInput.id ||
+        !dataUpdateInput.name ||
+        !dataUpdateInput.phone ||
+        !dataUpdateInput.gender ||
+        !dataUpdateInput.role ||
+        !dataUpdateInput.email
+      ) {
+        return res.status(200).json({
+          EM: "Nhập thiếu dữ liệu !!!",
+          EC: "-1",
+          DT: "",
+        });
+      }
 
       let data = await StaffService.updateUser(dataUpdateInput);
       return res.status(200).json({

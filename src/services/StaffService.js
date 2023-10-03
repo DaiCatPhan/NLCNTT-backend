@@ -3,32 +3,46 @@ import bcrypt, { genSaltSync } from "bcrypt";
 const salt = genSaltSync(10);
 
 const hashUserPassword = async (userPassword) => {
-  let hashPassword = await bcrypt.hashSync(userPassword, salt);
+  let hashPassword = bcrypt.hashSync(userPassword, salt);
   return hashPassword;
 };
 
 const checkEmailExist = async (userEmail) => {
-  let user = await db.Staff.findOne({
+  let user = null;
+
+  user = await db.Staff.findOne({
     where: {
       email: userEmail,
     },
   });
-  if (user) {
-    return true;
+
+  if (user === null) {
+    user = await db.Customer.findOne({
+      where: {
+        email: userEmail,
+      },
+    });
   }
-  return false; // Email khong ton tai !
+
+  if (user === null) {
+    return false;
+  }
+  return true; //  Email có tồn tại
 };
 
-const checkPhoneExist = async (userPhone) => {
-  let user = await db.Staff.findOne({
+const checkPhoneStaffExist = async (userPhone) => {
+  let user = null;
+
+  user = await db.Staff.findOne({
     where: {
       phone: userPhone,
     },
   });
-  if (user) {
-    return true;
+
+  if (user === null) {
+    return false;
   }
-  return false; // Email khong ton tai !
+  return true;
 };
 
 const checkIdExist = async (userId) => {
@@ -92,14 +106,14 @@ const getAllUser = async (data) => {
       DT: data,
     };
   }
-}; 
+};
 
 const createNewUser = async (rawUserData) => {
   try {
     // B1
+    // B2
     let isEmailExitst = await checkEmailExist(rawUserData.email);
-    let isPhoneExitst = await checkPhoneExist(rawUserData.phone);
-
+    let isPhoneExitst = await checkPhoneStaffExist(rawUserData.phone);
     if (isEmailExitst === true) {
       return {
         EM: "Email đã tồn tại !!!",
@@ -110,8 +124,8 @@ const createNewUser = async (rawUserData) => {
 
     if (isPhoneExitst === true) {
       return {
-        EM: "Số điện thoại đã tồn tại !!!",
-        EC: -2,
+        EM: "Phone đã tồn tại !!!",
+        EC: -1,
         DT: "",
       };
     }
@@ -165,6 +179,7 @@ const updateUser = async (rawUserData) => {
         gender: rawUserData.gender,
         role: rawUserData.role,
         email: rawUserData.email,
+        image: rawUserData.image,
       },
       {
         where: {
