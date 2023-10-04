@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import StaffService from "../services/StaffService";
 
 class Staff {
-  // [GET] /api/v1/staff/read 
+  // [GET] /api/v1/staff/read
   async readFunc(req, res) {
     try {
       if (req.query.page && req.query.limit) {
@@ -67,15 +67,19 @@ class Staff {
   }
 
   // [PUT] /api/v1/staff/update
-  async updateFunc(req, res) {
+  async updateFunc(req, res) { 
     try {
       let dataUpdateInput = req.body;
+      let image = req.file;
 
+      let imageUrl = image?.path;
+
+      
 
       if (
         !dataUpdateInput.id ||
         !dataUpdateInput.name ||
-        !dataUpdateInput.phone ||
+        !dataUpdateInput.phone || 
         !dataUpdateInput.gender ||
         !dataUpdateInput.role ||
         !dataUpdateInput.email
@@ -87,7 +91,7 @@ class Staff {
         });
       }
 
-      let data = await StaffService.updateUser(dataUpdateInput);
+      let data = await StaffService.updateUser(dataUpdateInput, imageUrl);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,

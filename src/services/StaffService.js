@@ -160,17 +160,22 @@ const createNewUser = async (rawUserData) => {
   }
 };
 
-const updateUser = async (rawUserData) => {
+const updateUser = async (rawUserData, imageUrl) => {
   try {
-    let isEmailExitst = await checkIdExist(rawUserData.id);
+    let isIdExitst = await checkIdExist(rawUserData.id);
 
-    if (isEmailExitst !== true) {
+    if (isIdExitst !== true) {
       return {
         EM: "Tài khoản (id) không tồn tại !!!",
         EC: 1,
         DT: "",
       };
     }
+
+    const objectUpdate = {};
+
+    imageUrl && (objectUpdate.image = imageUrl);
+    console.log(">> objectUpdate", objectUpdate);
 
     let updateUserData = await db.Staff.update(
       {
@@ -179,7 +184,7 @@ const updateUser = async (rawUserData) => {
         gender: rawUserData.gender,
         role: rawUserData.role,
         email: rawUserData.email,
-        image: rawUserData.image,
+        ...objectUpdate,
       },
       {
         where: {

@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import StaffController from "../controllers/StaffController";
+import uploadCloud from "../middleware/upLoadImage";
 
 // router.put("/updateStaff/:idStaff", StaffController.updateStaff);
 // router.post("/createStaff", StaffController.createStaff);
@@ -9,7 +10,7 @@ import StaffController from "../controllers/StaffController";
 
 router.get("/read", StaffController.readFunc);
 router.post("/create", StaffController.createFunc);
-router.put("/update", StaffController.updateFunc);
+router.put("/update", uploadCloud.single("image"), StaffController.updateFunc);
 router.delete("/delete", StaffController.deleteFunc);
 
 export default router;
