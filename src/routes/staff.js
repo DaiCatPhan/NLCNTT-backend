@@ -9,6 +9,7 @@ import uploadCloud from "../middleware/upLoadImage";
 // router.get("/getListPaginationStaff", StaffController.getListPaginationStaff);
 
 router.get("/read", StaffController.readFunc);
+router.get("/getUserOnly", StaffController.getStaffOnly);
 router.post("/create", StaffController.createFunc);
 router.put("/update", uploadCloud.single("image"), StaffController.updateFunc);
 router.delete("/delete", StaffController.deleteFunc);

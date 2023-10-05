@@ -103,7 +103,48 @@ const getAllUser = async (data) => {
     return {
       EM: "Loi server !!!",
       EC: -5,
-      DT: data,
+      DT: [],
+    };
+  }
+};
+
+const getUserOnlyById = async (id) => {
+  try {
+    let users = await db.Staff.findOne({
+      where: {
+        id: id,
+      },
+      attributes: [
+        "id",
+        "name",
+        "phone",
+        "gender",
+        "role",
+        "email",
+        "createdAt",
+        "image",
+      ],
+    });
+    if (users) {
+      let data = users;
+      return {
+        EM: "Lấy dữ liệu thành công",
+        EC: 0,
+        DT: data,
+      };
+    } else {
+      return {
+        EM: " Người dùng không tồn tại ",
+        EC: -2,
+        DT: "",
+      };
+    }
+  } catch (err) {
+    console.log(">> loi", err);
+    return {
+      EM: "Loi server !!!",
+      EC: -5,
+      DT: [],
     };
   }
 };
@@ -246,4 +287,5 @@ export default {
   updateUser,
   deleteUser,
   getUserWithPagination,
+  getUserOnlyById,
 };

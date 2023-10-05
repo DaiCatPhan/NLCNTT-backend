@@ -2,7 +2,7 @@ import db from "../app/models";
 
 const checkTourName = async (nameTour) => {
   let tourExit = null;
-  tourExit = await db.Tour.findOne({
+  tourExit = await db.Tour.findOne({ 
     where: {
       name: nameTour,
     },

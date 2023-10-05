@@ -16,6 +16,8 @@ class Tour {
 
   // [POST] /api/v1/tour/createTour
   async createTour(req, res, next) {
+    return res.json(req.body);
+
     try {
       const {
         name,
@@ -56,7 +58,6 @@ class Tour {
         image,
         vehicel,
       };
-
 
       const data = await TourService.createTour(reqDataNewTour);
 

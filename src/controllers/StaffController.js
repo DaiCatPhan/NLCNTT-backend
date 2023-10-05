@@ -67,19 +67,17 @@ class Staff {
   }
 
   // [PUT] /api/v1/staff/update
-  async updateFunc(req, res) { 
+  async updateFunc(req, res) {
     try {
       let dataUpdateInput = req.body;
       let image = req.file;
 
       let imageUrl = image?.path;
 
-      
-
       if (
         !dataUpdateInput.id ||
         !dataUpdateInput.name ||
-        !dataUpdateInput.phone || 
+        !dataUpdateInput.phone ||
         !dataUpdateInput.gender ||
         !dataUpdateInput.role ||
         !dataUpdateInput.email
@@ -113,6 +111,27 @@ class Staff {
       let idUser = req.body.id;
 
       let data = await StaffService.deleteUser(idUser);
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-3", // error code
+        DT: "", // data
+      });
+    }
+  }
+
+  // [GET] /api/v1/staff/getUserOnly
+  async getStaffOnly(req, res) {
+    try {
+      let idUser = +req.query.id;
+
+      let data = await StaffService.getUserOnlyById(idUser);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,
