@@ -67,7 +67,7 @@ class Staff {
   }
 
   // [PUT] /api/v1/staff/update
-  async updateFunc(req, res) {
+  async updateFunc(req, res) { 
     try {
       let dataUpdateInput = req.body;
       let image = req.file;
