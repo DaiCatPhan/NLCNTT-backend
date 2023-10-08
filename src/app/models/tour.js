@@ -17,18 +17,19 @@ module.exports = (sequelize, DataTypes) => {
   Tour.init(
     {
       name: DataTypes.STRING,
-      price: DataTypes.STRING,
+      priceAdult: DataTypes.STRING,
+      priceChild: DataTypes.STRING,
       type: DataTypes.STRING,
       duration: DataTypes.STRING,
-      description: DataTypes.STRING,
+      desriptionHTML: DataTypes.TEXT,
+      desriptionTEXT: DataTypes.TEXT,
       domain: DataTypes.STRING,
       image: DataTypes.STRING,
-      vehicel: DataTypes.STRING,
+      vehicle: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "Tour",
-      timestamps: false,
     }
   );
   return Tour;

@@ -6,7 +6,6 @@ class Tour {
   async getTour(req, res, next) {
     try {
       const { name, type, domain } = req.query;
-      console.log(">> req.query", req.query);
 
       if (!name && !type && !domain) {
         return res.status(200).json({
@@ -111,20 +110,35 @@ class Tour {
   // [POST] /api/v1/tour/createTour
   async createTour(req, res, next) {
     try {
-      let { name, price, type, duration, description, domain, vehicel } =
-        req.body;
+      let {
+        name,
+        priceAdult,
+        priceChild,
+        type,
+        duration,
+        desriptionHTML,
+        desriptionTEXT,
+        domain,
+        vehicle,
+      } = req.body;
 
+      let imageRaw = req.file;
       let imageUrl = req.file?.path;
+
+      console.log(req.body);
+      console.log(imageUrl);
 
       // Validate
       if (
         !name ||
-        !price ||
+        !priceAdult ||
+        !priceChild ||
         !type ||
         !duration ||
-        !description ||
+        !desriptionHTML ||
+        !desriptionTEXT ||
         !domain ||
-        !vehicel ||
+        !vehicle ||
         !imageUrl
       ) {
         return res.status(200).json({
@@ -136,12 +150,14 @@ class Tour {
 
       const reqDataNewTour = {
         name,
-        price,
+        priceAdult,
+        priceChild,
         type,
         duration,
-        description,
+        desriptionHTML,
+        desriptionTEXT,
         domain,
-        vehicel,
+        vehicle,
         image: imageUrl,
       };
 

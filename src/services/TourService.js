@@ -43,13 +43,15 @@ const createTour = async (rawData) => {
   try {
     const data = await db.Tour.create({
       name: rawData.name,
-      price: rawData.price,
+      priceAdult: rawData.priceAdult,
+      priceChild: rawData.priceChild,
       type: rawData.type,
       duration: rawData.duration,
-      description: rawData.description,
+      desriptionHTML: rawData.desriptionHTML,
+      desriptionTEXT: rawData.desriptionTEXT,
       domain: rawData.domain,
+      vehicle: rawData.vehicle,
       image: rawData.image,
-      vehicel: rawData.vehicel,
     });
 
     if (data) {
