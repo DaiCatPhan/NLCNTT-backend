@@ -31,7 +31,19 @@ const checkTourId = async (idTour) => {
 };
 
 const createTour = async (rawData) => {
-  const checkTourExit = await checkTourName(rawData.name);
+  const {
+    name,
+    priceAdult,
+    priceChild,
+    type,
+    duration,
+    desriptionHTML,
+    desriptionTEXT,
+    domain,
+    vehicle,
+    image,
+  } = rawData;
+  const checkTourExit = await checkTourName(name);
   if (checkTourExit) {
     return {
       EM: "Tour đã tồn tại !!!",
@@ -42,16 +54,16 @@ const createTour = async (rawData) => {
 
   try {
     const data = await db.Tour.create({
-      name: rawData.name,
-      priceAdult: rawData.priceAdult,
-      priceChild: rawData.priceChild,
-      type: rawData.type,
-      duration: rawData.duration,
-      desriptionHTML: rawData.desriptionHTML,
-      desriptionTEXT: rawData.desriptionTEXT,
-      domain: rawData.domain,
-      vehicle: rawData.vehicle,
-      image: rawData.image,
+      name: name,
+      priceAdult: priceAdult,
+      priceChild: priceChild,
+      type: type,
+      duration: duration,
+      desriptionHTML: desriptionHTML,
+      desriptionTEXT: desriptionTEXT,
+      domain: domain,
+      vehicle: vehicle,
+      image: image,
     });
 
     if (data) {
@@ -78,42 +90,50 @@ const createTour = async (rawData) => {
 };
 
 const getTour = async (rawData) => {
+  const { id, name, type, domain } = rawData;
   let dataTour = [];
-  if (rawData.name && !rawData.type && !rawData.domain) {
+  if (name && !id && !type && !domain) {
     dataTour = await db.Tour.findOne({
       where: {
-        name: rawData.name,
+        name: name,
       },
       raw: true,
     });
-  } else if (!rawData.name && rawData.type && !rawData.domain) {
-    dataTour = await db.Tour.findAll({
+  } else if (id && !name && !type && !domain) {
+    dataTour = await db.Tour.findOne({
       where: {
-        type: rawData.type,
+        id: id,
       },
       raw: true,
     });
-  } else if (!rawData.name && !rawData.type && rawData.domain) {
+  } else if (!name && type && !domain && !id) {
     dataTour = await db.Tour.findAll({
       where: {
-        domain: rawData.domain,
+        type: type,
       },
       raw: true,
     });
-  } else if (!rawData.name && rawData.type && rawData.domain) {
+  } else if (!name && !type && domain && !id) {
     dataTour = await db.Tour.findAll({
       where: {
-        type: rawData.type,
-        domain: rawData.domain,
+        domain: domain,
+      },
+      raw: true,
+    });
+  } else if (!name && !id && type && domain) {
+    dataTour = await db.Tour.findAll({
+      where: {
+        type: type,
+        domain: domain,
       },
       raw: true,
     });
   }
 
-  if (dataTour && dataTour.length > 0) {
+  if ((dataTour && dataTour.length > 0) || dataTour) {
     return {
       EM: "Lấy dữ liệu thành công",
-      EC: 1,
+      EC: 0,
       DT: dataTour,
     };
   } else {
@@ -125,8 +145,17 @@ const getTour = async (rawData) => {
   }
 };
 
+const getAllTour = async () => {
+  const data = await db.Tour.findAll({});
+  return {
+    EM: "Lấy tất cả Tour thành công",
+    EC: 0,
+    DT: data,
+  };
+};
+
 const updateTour = async (rawData) => {
-  const checkTourExit = await checkTourId(rawData.id);
+  const checkTourExit = await checkTourId(id);
   if (!checkTourExit) {
     return {
       EM: "Tour không  tồn tại !!!",
@@ -138,18 +167,20 @@ const updateTour = async (rawData) => {
   try {
     const updateUserData = await db.Tour.update(
       {
-        name: rawData.name,
-        price: rawData.price,
-        type: rawData.type,
-        duration: rawData.phone,
-        description: rawData.gender,
-        domain: rawData.role,
-        vehicel: rawData.email,
-        image: rawData.image,
+        name: name,
+        priceAdult: priceAdult,
+        priceChild: priceChild,
+        type: type,
+        duration: duration,
+        desriptionHTML: desriptionHTML,
+        desriptionTEXT: desriptionTEXT,
+        domain: domain,
+        image: image,
+        vehicle: vehicle,
       },
       {
         where: {
-          id: rawData.id,
+          id: id,
         },
       }
     );
@@ -170,7 +201,7 @@ const updateTour = async (rawData) => {
 };
 
 const deleteTour = async (rawData) => {
-  const checkTourExitById = await checkTourId(rawData.id);
+  const checkTourExitById = await checkTourId(id);
   if (!checkTourExitById) {
     return {
       EM: "Tour không tồn tại !!!",
@@ -182,7 +213,7 @@ const deleteTour = async (rawData) => {
   try {
     const data = await db.Tour.destroy({
       where: {
-        id: rawData.id,
+        id: id,
       },
     });
 
@@ -212,6 +243,7 @@ const deleteTour = async (rawData) => {
 export default {
   createTour,
   getTour,
+  getAllTour,
   deleteTour,
   updateTour,
 };

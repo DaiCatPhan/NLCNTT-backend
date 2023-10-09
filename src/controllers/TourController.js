@@ -2,12 +2,33 @@ import db from "../app/models";
 import TourService from "../services/TourService";
 
 class Tour {
+  // [GET]  /api/v1/tour/getAllTour
+
+  async getAllTour(req, res, next) {
+    try {
+      const data = await TourService.getAllTour();
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
+    }
+  }
+
   // [GET] /api/v1/tour/getTour
+
   async getTour(req, res, next) {
     try {
-      const { name, type, domain } = req.query;
+      const { id, name, type, domain } = req.query;
 
-      if (!name && !type && !domain) {
+      if (!id && !name && !type && !domain) {
         return res.status(200).json({
           EM: "Nhập thiếu trường dữ liệu !!!",
           EC: -2,
@@ -15,7 +36,7 @@ class Tour {
         });
       }
 
-      const data = await TourService.getTour({ name, type, domain });
+      const data = await TourService.getTour({ id, name, type, domain });
 
       res.status(200).json({
         EM: data.EM,
@@ -32,23 +53,39 @@ class Tour {
     }
   }
 
+  // [PUT] /api/v1/tour/updateTour
+
   async upDateTour(req, res, next) {
     try {
-      let { id, name, price, type, duration, description, domain, vehicel } =
-        req.body;
+      let {
+        id,
+        name,
+        priceAdult,
+        priceChild,
+        type,
+        duration,
+        desriptionHTML,
+        desriptionTEXT,
+        domain,
+        vehicle,
+      } = req.body;
 
-      let imageUrl = req.file?.path;
+      let image = req.file;
 
-      // Validate
+      let imageUrl = image?.path;
+
       if (
         !id ||
         !name ||
-        !price ||
+        !priceAdult ||
+        !priceChild ||
         !type ||
         !duration ||
-        !description ||
+        !desriptionHTML ||
+        !desriptionTEXT ||
         !domain ||
-        !vehicel
+        !imageUrl ||
+        !vehicle
       ) {
         return res.status(200).json({
           EM: "Nhập thiếu trường dữ liệu !!!",
@@ -60,13 +97,15 @@ class Tour {
       const reqDataUpdateTour = {
         id,
         name,
-        price,
+        priceAdult,
+        priceChild,
         type,
         duration,
-        description,
+        desriptionHTML,
+        desriptionTEXT,
         domain,
-        vehicel,
         image: imageUrl,
+        vehicle,
       };
 
       const data = await TourService.updateTour(reqDataUpdateTour);
@@ -86,6 +125,7 @@ class Tour {
   }
 
   // [DELETE] /api/v1/tour/deleteTour
+
   async deleteTour(req, res, next) {
     try {
       const id = +req.query.id;
@@ -124,9 +164,6 @@ class Tour {
 
       let imageRaw = req.file;
       let imageUrl = req.file?.path;
-
-      console.log(req.body);
-      console.log(imageUrl);
 
       // Validate
       if (
@@ -175,37 +212,6 @@ class Tour {
         EC: "-1", // error code
         DT: "", // data
       });
-    }
-  }
-
-  // [GET]  /api/v1/tour/getTours
-  async getTours(req, res, next) {
-    try {
-      const domain = req.query.domain;
-      const type = req.query.type;
-      var tours = [];
-      if (!domain) {
-        tours = await db.Tour.findAll({
-          where: {
-            type: type,
-          },
-        });
-      } else {
-        tours = await db.Tour.findAll({
-          where: {
-            domain: domain,
-            type: type,
-          },
-        });
-      }
-
-      if (!tours) {
-        return res.status(400).json({ err: 1, mes: "lay du lieu that bai" });
-      }
-      return res.status(200).json({ mes: "Success", data: tours });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ err: 5, mes: "Loi server" });
     }
   }
 }

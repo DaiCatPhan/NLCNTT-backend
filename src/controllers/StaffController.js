@@ -6,6 +6,7 @@ import StaffService from "../services/StaffService";
 
 class Staff {
   // [GET] /api/v1/staff/read
+
   async readFunc(req, res) {
     try {
       if (req.query.page && req.query.limit) {
@@ -30,6 +31,7 @@ class Staff {
   }
 
   // [POST] /api/v1/staff/create
+
   async createFunc(req, res) {
     try {
       let inputData = req.body;
@@ -67,6 +69,7 @@ class Staff {
   }
 
   // [PUT] /api/v1/staff/update
+
   async updateFunc(req, res) { 
     try {
       let dataUpdateInput = req.body;
@@ -106,6 +109,7 @@ class Staff {
   }
 
   // [DELETE] /api/v1/staff/delete
+
   async deleteFunc(req, res) {
     try {
       let idUser = req.body.id;
@@ -127,6 +131,7 @@ class Staff {
   }
 
   // [GET] /api/v1/staff/getUserOnly
+  
   async getStaffOnly(req, res) {
     try {
       let idUser = +req.query.id;
