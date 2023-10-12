@@ -92,56 +92,96 @@ const createTour = async (rawData) => {
 const getTour = async (rawData) => {
   const { id, name, type, domain } = rawData;
   let dataTour = [];
-  if (name && !id && !type && !domain) {
-    dataTour = await db.Tour.findOne({
-      where: {
-        name: name,
-      },
-      raw: true,
-    });
-  } else if (id && !name && !type && !domain) {
-    dataTour = await db.Tour.findOne({
+  try {
+    // name
+    if (name && !id && !type && !domain) {
+      dataTour = await db.Tour.findOne({
+        where: {
+          name: name,
+        },
+        raw: true,
+      });
+
+      if (!dataTour) {
+        return {
+          EM: "Không tìm thấy Tour  !!!",
+          EC: -2,
+          DT: dataTour,
+        };
+      }
+    }
+    // id
+    else if (id && !name && !type && !domain) {
+      dataTour = await db.Tour.findOne({
+        where: {
+          id: id,
+        },
+        raw: true,
+      });
+      if (!dataTour) {
+        return {
+          EM: "Không tìm thấy Tour  !!!",
+          EC: -2,
+          DT: dataTour,
+        };
+      }
+    }
+    // type
+    else if (!name && type && !domain && !id) {
+      dataTour = await db.Tour.findAll({
+        where: {
+          type: type,
+        },
+        raw: true,
+      });
+    }
+    // type and domain
+    else if (!name && !id && type && domain) {
+      dataTour = await db.Tour.findAll({
+        where: {
+          type: type,
+          domain: domain,
+        },
+        raw: true,
+      });
+    }
+
+    if ((dataTour && dataTour.length > 0) || dataTour) {
+      return {
+        EM: "Lấy dữ liệu thành công",
+        EC: 0,
+        DT: dataTour,
+      };
+    }
+  } catch (error) {
+    console.log(">>> error", error);
+    return {
+      EM: "Loi server !!!",
+      EC: 1,
+      DT: "",
+    };
+  }
+};
+
+const getTourById = async (rawData) => {
+  const { id } = rawData;
+  try {
+    const dataTour = await db.Tour.findOne({
       where: {
         id: id,
       },
-      raw: true,
-    });
-  } else if (!name && type && !domain && !id) {
-    dataTour = await db.Tour.findAll({
-      where: {
-        type: type,
+      include: {
+        model: db.Calendar,
+        attributes: ["id", "numberSeat", "startDay", "endDay"],
       },
-      raw: true,
     });
-  } else if (!name && !type && domain && !id) {
-    dataTour = await db.Tour.findAll({
-      where: {
-        domain: domain,
-      },
-      raw: true,
-    });
-  } else if (!name && !id && type && domain) {
-    dataTour = await db.Tour.findAll({
-      where: {
-        type: type,
-        domain: domain,
-      },
-      raw: true,
-    });
-  }
-
-  if ((dataTour && dataTour.length > 0) || dataTour) {
     return {
-      EM: "Lấy dữ liệu thành công",
+      EM: "Lấy dữ liệu thành công ",
       EC: 0,
       DT: dataTour,
     };
-  } else {
-    return {
-      EM: "Dữ liệu rỗng",
-      EC: 2,
-      DT: dataTour,
-    };
+  } catch (error) {
+    console.log(">> error", error);
   }
 };
 
@@ -200,6 +240,33 @@ const updateTour = async (rawData) => {
   }
 };
 
+const getTourWithPagination = async ({ page = 1, limit = 3 }) => {
+  try {
+    let offset = (page - 1) * limit;
+
+    const { count, rows } = await db.Tour.findAndCountAll({
+      offset: offset,
+      limit: limit,
+    });
+    let data = {
+      totalRows: count,
+      tours: rows,
+    };
+    return {
+      EM: "Lấy dữ liệu thành công ",
+      EC: 0,
+      DT: data,
+    };
+  } catch (err) {
+    console.log(">> loi", err);
+    return {
+      EM: "Loi server !!!",
+      EC: 1,
+      DT: "",
+    };
+  }
+};
+
 const deleteTour = async (rawData) => {
   const checkTourExitById = await checkTourId(id);
   if (!checkTourExitById) {
@@ -246,4 +313,6 @@ export default {
   getAllTour,
   deleteTour,
   updateTour,
+  getTourById,
+  getTourWithPagination,
 };

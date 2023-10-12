@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Tour.hasMany(models.Calender, {
+      Tour.hasMany(models.Calendar, {
         sourceKey: "id",
         foreignKey: "idTour",
-      });
+      }); 
 
       Tour.hasOne(models.ProcessTour, {
         sourceKey: "id",

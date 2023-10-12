@@ -4,6 +4,8 @@ import TourController from "../controllers/TourController";
 import uploadCloud from "../middleware/upLoadImage";
 
 router.get("/getTour", TourController.getTour);
+router.get("/getTourPanigation", TourController.getTourPanigation);
+router.get("/getTourById", TourController.getTourById);
 router.get("/getAllTour", TourController.getAllTour);
 router.delete("/deleteTour", TourController.deleteTour);
 router.put(

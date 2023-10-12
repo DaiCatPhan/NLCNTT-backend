@@ -1,8 +1,12 @@
 import authenticationRouter from "./authentication";
 import tourRouter from "./tour";
 import staffRouter from "./staff";
+import calendarTourRouter from "./calendarTour";
 
 function route(app) {
+  // Calendar
+  app.use("/api/v1/calendar", calendarTourRouter);
+
   // Staff
   app.use("/api/v1/staff", staffRouter);
 

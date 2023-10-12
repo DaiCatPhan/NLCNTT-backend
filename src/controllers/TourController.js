@@ -3,7 +3,6 @@ import TourService from "../services/TourService";
 
 class Tour {
   // [GET]  /api/v1/tour/getAllTour
-
   async getAllTour(req, res, next) {
     try {
       const data = await TourService.getAllTour();
@@ -22,8 +21,61 @@ class Tour {
     }
   }
 
-  // [GET] /api/v1/tour/getTour
+  // [GET] /api/v1/tour/getTourById
+  async getTourById(req, res, next) {
+    try {
+      const { id } = req.query;
 
+      if (!id) {
+        return res.status(200).json({
+          EM: "Nhập thiếu trường dữ liệu !!!",
+          EC: -2,
+          DT: "",
+        });
+      }
+
+      const data = await TourService.getTourById({ id });
+
+      res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
+    }
+  }
+
+  // [GET] /api/v1/tour/getTourPanigation
+  async getTourPanigation(req, res, next) {
+    try {
+      if (req.query.page && req.query.limit) {
+        let page = +req.query.page;
+        let limit = +req.query.limit;
+
+        let data = await TourService.getTourWithPagination({ page, limit });
+        return res.status(200).json({
+          EM: data.EM,
+          EC: data.EC,
+          DT: data.DT, 
+        });
+      }
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
+    }
+  }
+
+  // [GET] /api/v1/tour/getTour
   async getTour(req, res, next) {
     try {
       const { id, name, type, domain } = req.query;
@@ -54,7 +106,6 @@ class Tour {
   }
 
   // [PUT] /api/v1/tour/updateTour
-
   async upDateTour(req, res, next) {
     try {
       let {
@@ -125,7 +176,6 @@ class Tour {
   }
 
   // [DELETE] /api/v1/tour/deleteTour
-
   async deleteTour(req, res, next) {
     try {
       const id = +req.query.id;
