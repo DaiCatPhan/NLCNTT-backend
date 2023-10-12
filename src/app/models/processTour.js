@@ -9,11 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      ProcessTour.belongsTo(models.Tour, { 
+        foreignKey: "idTour",
+        targetKey: "id",
+      });
     }
   }
   ProcessTour.init(
     {
-      idTour: DataTypes.INTEGER,
+      idTour: DataTypes.INTEGER, 
       name: DataTypes.STRING, 
       descriptionHTML: DataTypes.STRING,
       descriptionTEXT: DataTypes.STRING,

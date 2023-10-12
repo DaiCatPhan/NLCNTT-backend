@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Customer.hasMany(models.RegistrationTour, {
+        sourceKey: "id",
+        foreignKey: "idCustomer", 
+      });
     }
   }
   Customer.init(

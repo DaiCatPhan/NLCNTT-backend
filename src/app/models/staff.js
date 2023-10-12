@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Staff.hasMany(models.RegistrationTour, {
+        sourceKey: "id",
+        foreignKey: "idStaff",
+      });
     }
   }
   Staff.init(
