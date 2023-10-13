@@ -14,7 +14,7 @@ class Tour {
     } catch (err) {
       console.log("err <<< ", err);
       return res.status(500).json({
-        EM: "error server", // error message
+        EM: "error server", // error message 
         EC: "-1", // error code
         DT: "", // data
       });

@@ -8,7 +8,7 @@ import route from "./src/routes";
 const app = express();
 const port = 3000;
 
-// Cấu hình cors
+// Cấu hình cors : chia sẻ nguồn tài nguyên cho người khác
 app.use(
   cors({
     origin: "http://localhost:5173",
