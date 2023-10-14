@@ -14,7 +14,7 @@ class Tour {
     } catch (err) {
       console.log("err <<< ", err);
       return res.status(500).json({
-        EM: "error server", // error message 
+        EM: "error server", // error message
         EC: "-1", // error code
         DT: "", // data
       });
@@ -62,7 +62,7 @@ class Tour {
         return res.status(200).json({
           EM: data.EM,
           EC: data.EC,
-          DT: data.DT, 
+          DT: data.DT,
         });
       }
     } catch (err) {
@@ -115,13 +115,13 @@ class Tour {
         priceChild,
         type,
         duration,
-        desriptionHTML,
-        desriptionTEXT,
+        descriptionHTML,
+        descriptionTEXT,
         domain,
         vehicle,
       } = req.body;
 
-      let image = req.file;
+      let image = req?.file;
 
       let imageUrl = image?.path;
 
@@ -132,10 +132,9 @@ class Tour {
         !priceChild ||
         !type ||
         !duration ||
-        !desriptionHTML ||
-        !desriptionTEXT ||
+        !descriptionHTML ||
+        !descriptionTEXT ||
         !domain ||
-        !imageUrl ||
         !vehicle
       ) {
         return res.status(200).json({
@@ -152,8 +151,8 @@ class Tour {
         priceChild,
         type,
         duration,
-        desriptionHTML,
-        desriptionTEXT,
+        descriptionHTML,
+        descriptionTEXT,
         domain,
         image: imageUrl,
         vehicle,

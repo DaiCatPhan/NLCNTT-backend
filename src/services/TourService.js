@@ -195,6 +195,20 @@ const getAllTour = async () => {
 };
 
 const updateTour = async (rawData) => {
+  console.log(rawData);
+  const {
+    id,
+    name,
+    priceAdult,
+    priceChild,
+    type,
+    duration,
+    descriptionHTML,
+    descriptionTEXT,
+    domain,
+    image,
+    vehicle,
+  } = rawData;
   const checkTourExit = await checkTourId(id);
   if (!checkTourExit) {
     return {
@@ -212,8 +226,8 @@ const updateTour = async (rawData) => {
         priceChild: priceChild,
         type: type,
         duration: duration,
-        desriptionHTML: desriptionHTML,
-        desriptionTEXT: desriptionTEXT,
+        descriptionHTML: descriptionHTML,
+        descriptionTEXT: descriptionTEXT,
         domain: domain,
         image: image,
         vehicle: vehicle,
