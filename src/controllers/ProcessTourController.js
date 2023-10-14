@@ -3,8 +3,10 @@ import ProcessTourService from "../services/ProcessTourService";
 class ProcessTour {
   // [POST] /api/v1/processTour/create
   async create(req, res) {
-    const { idTour, name, descriptionHTML, descriptionTEXT } = req.body;
-    if (!idTour || !name || !descriptionHTML || !descriptionTEXT) {
+    const { idTour, nameProcessTour, descriptionHTML, descriptionTEXT } =
+      req.body;
+
+    if (!idTour || !nameProcessTour || !descriptionHTML || !descriptionTEXT) {
       return res.status(200).json({
         EM: "Nhập thiếu trường dữ liệu !!!",
         EC: -2,
@@ -14,7 +16,7 @@ class ProcessTour {
 
     const data = await ProcessTourService.createProcessTour({
       idTour,
-      name,
+      nameProcessTour,
       descriptionHTML,
       descriptionTEXT,
     });
@@ -38,7 +40,7 @@ class ProcessTour {
   // [GET] /api/v1/processTour/read
   async read(req, res) {
     try {
-      const { idTour } = req.body;
+      const { idTour } = req.query;
       if (!idTour) {
         return res.status(200).json({
           EM: "Nhập thiếu trường dữ liệu !!!",
@@ -66,12 +68,32 @@ class ProcessTour {
 
   // [GET] /api/v1/processTour/update
   async update(req, res) {
-    const { idTour, name, descriptionHTML, descriptionTEXT } = req.body;
+    const {
+      idTour,
+      idProcessTour,
+      nameProcessTour,
+      descriptionHTML,
+      descriptionTEXT,
+    } = req.body;
 
+    if (
+      !idTour ||
+      !idProcessTour ||
+      !nameProcessTour ||
+      !descriptionHTML ||
+      !descriptionTEXT
+    ) {
+      return res.status(200).json({
+        EM: "Nhập thiếu dữ liệu ",
+        EC: -3,
+        DT: [],
+      });
+    }
     try {
       const data = await ProcessTourService.updateProcessTour({
         idTour,
-        name,
+        idProcessTour,
+        nameProcessTour,
         descriptionHTML,
         descriptionTEXT,
       });
@@ -92,24 +114,20 @@ class ProcessTour {
 
   // [GET] /api/v1/processTour/delete
   async delete(req, res) {
-    const { idTour } = req.body;
+    const { idTour, idProcessTour } = req.body;
+    if (!idTour || !idProcessTour) {
+      return res.status(200).json({
+        EM: "Nhập thiếu trường dữ liệu !!!",
+        EC: -2,
+        DT: [],
+      });
+    }
 
-    if (!idTour) {
-      return res.status(200).json({
-        EM: "Nhập thiếu trường dữ liệu !!!",
-        EC: -2,
-        DT: [],
-      });
-    }
-    if (!idTour) {
-      return res.status(200).json({
-        EM: "Nhập thiếu trường dữ liệu !!!",
-        EC: -2,
-        DT: [],
-      });
-    }
     try {
-      const data = await ProcessTourService.deleteProcessTour({ idTour });
+      const data = await ProcessTourService.deleteProcessTour({
+        idTour,
+        idProcessTour,
+      });
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,

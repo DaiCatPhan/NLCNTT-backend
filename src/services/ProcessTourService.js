@@ -1,9 +1,10 @@
 import db from "../app/models";
 
-const checkProcessTour = async (idTour) => {
+const checkProcessTour = async (idTour, idProcessTour) => {
   const isExitsProcessTour = await db.ProcessTour.findOne({
     where: {
       idTour: idTour,
+      id: idProcessTour,
     },
   });
 
@@ -14,26 +15,58 @@ const checkProcessTour = async (idTour) => {
   return false;
 };
 
+const isExitTour = async (idTour) => {
+  const isExitsTour = await db.Tour.findOne({
+    where: {
+      id: idTour,
+    },
+  });
+
+  if (isExitsTour) {
+    return true;
+  }
+
+  return false;
+};
+
 const createProcessTour = async (rawData) => {
   try {
-    const { idTour, name, descriptionHTML, descriptionTEXT } = rawData;
+    const { idTour, nameProcessTour, descriptionHTML, descriptionTEXT } =
+      rawData;
 
-    const isExitsProcessTour = await checkProcessTour(+idTour);
+    const exitsTour = await db.Tour.findOne({
+      where: {
+        id: idTour,
+      },
+    });
 
-    if (isExitsProcessTour) {
+    const exitsPro = await db.ProcessTour.findOne({
+      where: {
+        idTour: idTour,
+      },
+    });
+
+    if (!exitsTour) {
       return {
-        EM: "Chương Trình Tour đã tồn tại !!! . Không tạo mới được !!!!",
-        EC: -1,
+        EM: "Tour không tồn tại !!!",
+        EC: -2,
+        DT: [],
+      };
+    }
+
+    if (exitsPro) {
+      return {
+        EM: "Chương trình Tour đã tồn tại !!! , Không thể tạo mới",
+        EC: -2,
         DT: [],
       };
     }
 
     const createProcess = await db.ProcessTour.create({
       idTour: +idTour,
-      name: name,
+      name: nameProcessTour,
       descriptionHTML: descriptionHTML,
-      descriptionTEXT,
-      descriptionTEXT,
+      descriptionTEXT: descriptionTEXT,
     });
 
     if (createProcess) {
@@ -57,31 +90,30 @@ const readProcessTour = async (rawData) => {
   try {
     const { idTour } = rawData;
 
-    const isExitsProcessTour = await checkProcessTour(+idTour);
+    const exitsTour = await isExitTour(+idTour);
 
-    if (!isExitsProcessTour) {
+    if (!exitsTour) {
       return {
-        EM: "Chương Trình Tour không tồn tại !!!  ",
+        EM: " Tour không tồn tại !!!  ",
         EC: -1,
         DT: [],
       };
     }
 
-    const createProcess = await db.ProcessTour.findOne({
+    const processTour = await db.Tour.findOne({
       where: {
-        idTour: +idTour,
+        id: +idTour,
       },
       include: {
-        model: db.Tour,
-        attributes: ["image"],
+        model: db.ProcessTour,
       },
     });
 
-    if (createProcess) {
+    if (processTour) {
       return {
         EM: "Đọc chương trình Tour thành công",
         EC: 0,
-        DT: createProcess,
+        DT: processTour,
       };
     }
   } catch (error) {
@@ -96,10 +128,16 @@ const readProcessTour = async (rawData) => {
 
 const updateProcessTour = async (rawData) => {
   try {
-    const { idTour, name, descriptionHTML, descriptionTEXT } = rawData;
+    const {
+      idTour,
+      idProcessTour,
+      nameProcessTour,
+      descriptionHTML,
+      descriptionTEXT,
+    } = rawData;
 
-    const isExitsProcessTour = await checkProcessTour(+idTour);
-
+    const isExitsProcessTour = await checkProcessTour(+idTour, +idProcessTour);
+    console.log(">>>>>>>>>>>>>>>>>>>>.");
     if (!isExitsProcessTour) {
       return {
         EM: "Chương Trình Tour không tồn tại !!!  ",
@@ -110,13 +148,13 @@ const updateProcessTour = async (rawData) => {
 
     const updateProcess = await db.ProcessTour.update(
       {
-        name: name,
+        name: nameProcessTour,
         descriptionHTML: descriptionHTML,
-        descriptionTEXT,
-        descriptionTEXT,
+        descriptionTEXT: descriptionTEXT,
       },
       {
         where: {
+          id: +idProcessTour,
           idTour: +idTour,
         },
       }
@@ -141,9 +179,9 @@ const updateProcessTour = async (rawData) => {
 
 const deleteProcessTour = async (rawData) => {
   try {
-    const { idTour } = rawData;
+    const { idTour, idProcessTour } = rawData;
 
-    const isExitsProcessTour = await checkProcessTour(+idTour);
+    const isExitsProcessTour = await checkProcessTour(+idTour, +idProcessTour);
 
     if (!isExitsProcessTour) {
       return {
@@ -156,6 +194,7 @@ const deleteProcessTour = async (rawData) => {
     const deleteProcess = await db.ProcessTour.destroy({
       where: {
         idTour: +idTour,
+        id: +idProcessTour,
       },
     });
 
