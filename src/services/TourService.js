@@ -37,8 +37,8 @@ const createTour = async (rawData) => {
     priceChild,
     type,
     duration,
-    desriptionHTML,
-    desriptionTEXT,
+    descriptionHTML,
+    descriptionTEXT,
     domain,
     vehicle,
     image,
@@ -59,8 +59,8 @@ const createTour = async (rawData) => {
       priceChild: priceChild,
       type: type,
       duration: duration,
-      desriptionHTML: desriptionHTML,
-      desriptionTEXT: desriptionTEXT,
+      descriptionHTML: descriptionHTML,
+      descriptionTEXT: descriptionTEXT,
       domain: domain,
       vehicle: vehicle,
       image: image,
@@ -163,17 +163,22 @@ const getTour = async (rawData) => {
   }
 };
 
-const getTourById = async (rawData) => {
+const getTourDetailById = async (rawData) => {
   const { id } = rawData;
   try {
     const dataTour = await db.Tour.findOne({
       where: {
         id: id,
       },
-      include: {
-        model: db.Calendar,
-        attributes: ["id", "numberSeat", "startDay", "endDay"],
-      },
+      include: [
+        {
+          model: db.Calendar,
+          attributes: ["id", "numberSeat", "startDay", "endDay"],
+        },
+        {
+          model: db.ProcessTour,
+        },
+      ],
     });
     return {
       EM: "Lấy dữ liệu thành công ",
@@ -182,11 +187,19 @@ const getTourById = async (rawData) => {
     };
   } catch (error) {
     console.log(">> error", error);
+    return {
+      EM: "Loi server !!!",
+      EC: -5,
+      DT: "",
+    };
   }
 };
 
-const getAllTour = async () => {
-  const data = await db.Tour.findAll({});
+const getAllTourDetail = async () => {
+  const data = await db.Tour.findAll({
+    include: [{ model: db.Calendar }, { model: db.ProcessTour }],
+  });
+
   return {
     EM: "Lấy tất cả Tour thành công",
     EC: 0,
@@ -324,9 +337,9 @@ const deleteTour = async (rawData) => {
 export default {
   createTour,
   getTour,
-  getAllTour,
+  getAllTourDetail,
   deleteTour,
   updateTour,
-  getTourById,
+  getTourDetailById,
   getTourWithPagination,
 };

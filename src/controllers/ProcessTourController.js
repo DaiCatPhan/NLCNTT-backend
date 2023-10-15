@@ -11,7 +11,7 @@ class ProcessTour {
         EM: "Nhập thiếu trường dữ liệu !!!",
         EC: -2,
         DT: [],
-      });
+      }); 
     }
 
     const data = await ProcessTourService.createProcessTour({

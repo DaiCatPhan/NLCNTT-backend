@@ -5,7 +5,7 @@ import uploadCloud from "../middleware/upLoadImage";
 
 router.get("/getTour", TourController.getTour);
 router.get("/getTourPanigation", TourController.getTourPanigation);
-router.get("/getTourById", TourController.getTourById);
+router.get("/getTourDetailById", TourController.getTourDetailById);
 router.get("/getAllTour", TourController.getAllTour);
 router.delete("/deleteTour", TourController.deleteTour);
 router.put(

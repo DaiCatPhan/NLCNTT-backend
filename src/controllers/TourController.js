@@ -5,7 +5,7 @@ class Tour {
   // [GET]  /api/v1/tour/getAllTour
   async getAllTour(req, res, next) {
     try {
-      const data = await TourService.getAllTour();
+      const data = await TourService.getAllTourDetail({});
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,
@@ -21,8 +21,8 @@ class Tour {
     }
   }
 
-  // [GET] /api/v1/tour/getTourById
-  async getTourById(req, res, next) {
+  // [GET] /api/v1/tour/getTourDetailById
+  async getTourDetailById(req, res, next) {
     try {
       const { id } = req.query;
 
@@ -34,7 +34,7 @@ class Tour {
         });
       }
 
-      const data = await TourService.getTourById({ id });
+      const data = await TourService.getTourDetailById({ id });
 
       res.status(200).json({
         EM: data.EM,
@@ -74,6 +74,8 @@ class Tour {
       });
     }
   }
+
+  // =+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   // [GET] /api/v1/tour/getTour
   async getTour(req, res, next) {
@@ -205,8 +207,8 @@ class Tour {
         priceChild,
         type,
         duration,
-        desriptionHTML,
-        desriptionTEXT,
+        descriptionHTML,
+        descriptionTEXT,
         domain,
         vehicle,
       } = req.body;
@@ -221,8 +223,8 @@ class Tour {
         !priceChild ||
         !type ||
         !duration ||
-        !desriptionHTML ||
-        !desriptionTEXT ||
+        !descriptionHTML ||
+        !descriptionTEXT ||
         !domain ||
         !vehicle ||
         !imageUrl
@@ -240,8 +242,8 @@ class Tour {
         priceChild,
         type,
         duration,
-        desriptionHTML,
-        desriptionTEXT,
+        descriptionHTML,
+        descriptionTEXT,
         domain,
         vehicle,
         image: imageUrl,
