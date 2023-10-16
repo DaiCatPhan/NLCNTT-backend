@@ -3,8 +3,11 @@ import tourRouter from "./tour";
 import staffRouter from "./staff";
 import calendarTourRouter from "./calendarTour";
 import processTourRouter from "./processTour";
+import customerRouter from "./customer";
 
 function route(app) {
+  // ProcessTour
+  app.use("/api/v1/customer", customerRouter);
 
   // ProcessTour
   app.use("/api/v1/processTour", processTourRouter);

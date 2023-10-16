@@ -8,7 +8,7 @@ import "dotenv/config";
 const salt = genSaltSync(10);
 
 const hashUserPassword = (userPassword) => {
-  let hashPassword = bcrypt.hashSync(userPassword, salt);
+  let hashPassword = bcrypt.hashSync(userPassword, salt); 
   return hashPassword;
 };
 
@@ -103,7 +103,6 @@ const handleUserLogin = async (rawData) => {
   try {
     let user = await getUserLogin(rawData.email);
 
-    console.log(">> check user", user);
 
     if (user === null) {
       return {

@@ -56,7 +56,7 @@ class Authentication {
         DT: "", // data
       });
     }
-  }
+  } 
 
   // [POST] /api/v1/authentication/register
   async handleRegister(req, res, next) {

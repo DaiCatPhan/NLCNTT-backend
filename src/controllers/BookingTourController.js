@@ -2,6 +2,7 @@ import db from "../app/models";
 
 class BookingTour {
   async create(req, res) {
+    const { idCustomer, idStaff, idCalendar, idTour } = req.body;
     try {
       return res.status(200).json({
         EM: data.EM,
@@ -18,7 +19,7 @@ class BookingTour {
     }
   }
 
-  async get(req, res) {
+  async read(req, res) {
     try {
       return res.status(200).json({
         EM: data.EM,
