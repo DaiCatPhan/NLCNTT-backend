@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Customer.hasMany(models.BookingTour, {
         sourceKey: "id",
-        foreignKey: "idCustomer", 
+        foreignKey: "idCustomer",
       });
     }
   }
@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       gender: DataTypes.STRING,
       role: DataTypes.STRING,
       email: DataTypes.STRING,
+      phone: DataTypes.STRING,
+      address: DataTypes.STRING,
       password: DataTypes.STRING,
     },
     {

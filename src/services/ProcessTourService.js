@@ -137,7 +137,6 @@ const updateProcessTour = async (rawData) => {
     } = rawData;
 
     const isExitsProcessTour = await checkProcessTour(+idTour, +idProcessTour);
-    console.log(">>>>>>>>>>>>>>>>>>>>.");
     if (!isExitsProcessTour) {
       return {
         EM: "Chương Trình Tour không tồn tại !!!  ",

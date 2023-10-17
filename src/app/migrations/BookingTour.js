@@ -9,10 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      idCalender: { type: Sequelize.INTEGER },
+      idCalendar: { type: Sequelize.INTEGER },
       idCustomer: { type: Sequelize.INTEGER },
       idStaff: { type: Sequelize.INTEGER },
-      numberTicket: { type: Sequelize.STRING },
+      numberTicketAdult: { type: Sequelize.STRING },
+      numberTicketChild: { type: Sequelize.STRING },
       money: { type: Sequelize.STRING },
 
       createdAt: { type: Sequelize.DATE },

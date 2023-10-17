@@ -12,7 +12,7 @@ class Customer {
         let page = +req.query.page;
         let limit = +req.query.limit;
 
-        let data = await CustomerService.getCustomerWithPagination({
+        let data = await CustomerService.getCustomerWithPagination({ 
           page,
           limit,
         });

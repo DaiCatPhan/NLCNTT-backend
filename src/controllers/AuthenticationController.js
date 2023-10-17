@@ -26,7 +26,7 @@ class Authentication {
 
       if (!email || !password) {
         return res.status(200).json({
-          EM: "Nhập thiếu dữ liệu !!!",  
+          EM: "Nhập thiếu dữ liệu !!!",
           EC: "1",
           DT: "",
         });
@@ -56,12 +56,13 @@ class Authentication {
         DT: "", // data
       });
     }
-  } 
+  }
 
   // [POST] /api/v1/authentication/register
   async handleRegister(req, res, next) {
     try {
       const { email, name, gender, password } = req.body;
+
       // Validate
       if (!email || !name || !gender || !password) {
         return res.status(200).json({

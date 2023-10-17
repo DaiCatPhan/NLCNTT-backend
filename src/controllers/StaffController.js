@@ -52,7 +52,7 @@ class Staff {
         };
       }
 
-      let data = await StaffService.createNewUser(inputData);
+      let data = await StaffService.createNewUser(inputData); 
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,
@@ -70,7 +70,7 @@ class Staff {
 
   // [PUT] /api/v1/staff/update
 
-  async updateFunc(req, res) { 
+  async updateFunc(req, res) {
     try {
       let dataUpdateInput = req.body;
       let image = req.file;
@@ -131,7 +131,7 @@ class Staff {
   }
 
   // [GET] /api/v1/staff/getUserOnly
-  
+
   async getStaffOnly(req, res) {
     try {
       let idUser = +req.query.id;
