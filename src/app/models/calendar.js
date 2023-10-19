@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       idTour: DataTypes.INTEGER,
       numberSeat: DataTypes.STRING,
-      startDay: DataTypes.STRING,
-      endDay: DataTypes.STRING,
+      startDay: DataTypes.DATE,
+      endDay: DataTypes.DATE,
     },
     {
       sequelize,

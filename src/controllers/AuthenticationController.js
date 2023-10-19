@@ -32,7 +32,7 @@ class Authentication {
         });
       }
 
-      let data = await AuthenticaitonService.handleUserLogin({
+      let data = await AuthenticaitonService.handleUserLogin({ 
         email,
         password,
       });
