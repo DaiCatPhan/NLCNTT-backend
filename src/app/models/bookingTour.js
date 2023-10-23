@@ -17,17 +17,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "idCustomer",
         targetKey: "id",
       });
-      BookingTour.belongsTo(models.Staff, {
-        foreignKey: "idStaff",
-        targetKey: "id",
-      });
+      // BookingTour.belongsTo(models.Staff, {
+      //   foreignKey: "idStaff",
+      //   targetKey: "id",
+      // });
     }
   }
   BookingTour.init(
     {
       idCustomer: DataTypes.INTEGER,
       idCalendar: DataTypes.INTEGER,
-      idStaff: DataTypes.INTEGER,
       numberTicketAdult: DataTypes.STRING,
       numberTicketChild: DataTypes.STRING,
       money: DataTypes.STRING,

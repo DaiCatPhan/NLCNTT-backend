@@ -17,6 +17,17 @@ const checkEmailExist = async (userEmail) => {
   return true;
 };
 
+const getInfoUserById = async (userEmail) => {
+  const user = await db.Customer.findOne({
+    where: {
+      email: userEmail,
+    },
+    attributes: { exclude: ["password", "createdAt", "updatedAt", "role"] },
+  });
+
+  return user;
+};
+
 const getCustomerWithPagination = async ({ page = 1, limit = 3 }) => {
   try {
     let offset = (page - 1) * limit;
@@ -44,17 +55,45 @@ const getCustomerWithPagination = async ({ page = 1, limit = 3 }) => {
   }
 };
 
-const getAllUser = async (data) => {
+const findOrCreate = async (rawData) => {
   try {
-    let users = await db.Staff.findAll({
-      attributes: ["name", "phone", "gender", "role", "email", "createdAt"],
+    const [user, created] = await db.Customer.findOrCreate({
+      where: { email: rawData.email },
+      defaults: {
+        email: rawData.email,
+        name: rawData.name,
+        phone: rawData.phone,
+        address: rawData.address,
+        role: "khachhang",
+      },
     });
-    if (users) {
-      let data = users;
+
+    if (created) {
       return {
-        EM: "Lấy dữ liệu thành công",
+        EM: "Tạo người dùng thành công",
         EC: 0,
-        DT: data,
+        DT: user,
+      };
+    } else {
+      const updateCus = await db.Customer.update(
+        {
+          name: rawData.name,
+          phone: rawData.phone,
+          address: rawData.address,
+        },
+        {
+          where: {
+            email: rawData.email,
+          },
+        }
+      );
+
+      const InfoCusUpdated = await getInfoUserById(rawData.email);
+
+      return {
+        EM: "Update người dùng thành công",
+        EC: 1,
+        DT: { updateCus, InfoCusUpdated },
       };
     }
   } catch (err) {
@@ -67,12 +106,22 @@ const getAllUser = async (data) => {
   }
 };
 
-const getUserOnlyById = async (id) => {
+const getCustomerOnlyById = async (id) => {
   try {
-    let users = await db.Staff.findOne({
+    let users = await db.Customer.findOne({
       where: {
         id: id,
       },
+      include: [
+        {
+          model: db.BookingTour,
+          include: [
+            {
+              model: db.Calendar,
+            },
+          ],
+        },
+      ],
     });
     if (users) {
       let data = users;
@@ -232,4 +281,6 @@ const deleteUser = async (id) => {
 
 export default {
   getCustomerWithPagination,
+  findOrCreate,
+  getCustomerOnlyById,
 };

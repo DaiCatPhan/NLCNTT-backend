@@ -5,7 +5,6 @@ class BookingTour {
   async create(req, res) {
     const {
       idCustomer,
-      idStaff,
       idCalendar,
       numberTicketAdult,
       numberTicketChild,
@@ -13,7 +12,7 @@ class BookingTour {
     } = req.body;
 
     if (
-      (!idCustomer || !idStaff || !idCalendar,
+      (!idCustomer || !idCalendar,
       (!numberTicketAdult && !numberTicketChild) || !money)
     ) {
       return res.status(200).json({

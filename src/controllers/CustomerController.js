@@ -3,6 +3,36 @@ import db from "../app/models";
 import CustomerService from "../services/CustomerService";
 
 class Customer {
+  // [POST] /api/v1/customer/findOrCreate
+
+  async findOrCreate(req, res) {
+    try {
+      const { email, name, phone, address } = req.body;
+
+      // check điều kiện :
+      if (!name || !email || !phone || !address) {
+        return {
+          EM: "Nhập thiếu dữ liệu",
+          EC: -2,
+          DT: "",
+        };
+      }
+
+      let data = await CustomerService.findOrCreate(req.body);
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
+    }
+  }
   // [GET] /api/v1/customer/readPanigation
 
   async readPanigation(req, res) {
@@ -12,7 +42,7 @@ class Customer {
         let page = +req.query.page;
         let limit = +req.query.limit;
 
-        let data = await CustomerService.getCustomerWithPagination({ 
+        let data = await CustomerService.getCustomerWithPagination({
           page,
           limit,
         });
@@ -36,7 +66,7 @@ class Customer {
 
   async create(req, res) {
     try {
-      return res.json("create");
+      return res.json(req.body);
       let inputData = req.body;
 
       // check điều kiện :

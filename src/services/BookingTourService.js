@@ -3,7 +3,7 @@ import db from "../app/models";
 const createBooking = async (rawData) => {
   const {
     idCustomer,
-    idStaff,
+
     idCalendar,
     numberTicketAdult,
     numberTicketChild,
@@ -13,7 +13,7 @@ const createBooking = async (rawData) => {
   try {
     const res = await db.BookingTour.create({
       idCustomer: idCustomer,
-      idStaff: idStaff,
+
       idCalendar: idCalendar,
 
       numberTicketAdult: numberTicketAdult,
@@ -33,7 +33,7 @@ const createBooking = async (rawData) => {
     return {
       EM: "Loi server !!!",
       EC: -5,
-      DT: data,
+      DT: [],
     };
   }
 };
@@ -63,7 +63,7 @@ const readBooking = async (rawData) => {
     return {
       EM: "Loi server !!!",
       EC: -5,
-      DT: data,
+      DT: [],
     };
   }
 };

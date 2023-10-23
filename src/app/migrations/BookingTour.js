@@ -11,7 +11,6 @@ module.exports = {
       },
       idCalendar: { type: Sequelize.INTEGER },
       idCustomer: { type: Sequelize.INTEGER },
-      idStaff: { type: Sequelize.INTEGER },
       numberTicketAdult: { type: Sequelize.STRING },
       numberTicketChild: { type: Sequelize.STRING },
       money: { type: Sequelize.STRING },
