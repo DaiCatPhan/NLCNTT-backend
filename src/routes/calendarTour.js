@@ -6,6 +6,10 @@ import CalendarTourController from "../controllers/CalendarTourController";
 router.post("/create", CalendarTourController.create);
 router.get("/read", CalendarTourController.read);
 router.put("/update", CalendarTourController.update);
+router.patch(
+  "/updateRegisteredSeats",
+  CalendarTourController.updateRegisteredSeats
+);
 router.delete("/delete", CalendarTourController.delete);
 
 export default router;

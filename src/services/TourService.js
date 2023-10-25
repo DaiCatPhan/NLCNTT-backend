@@ -173,7 +173,7 @@ const getTourDetailById = async (rawData) => {
       include: [
         {
           model: db.Calendar,
-          attributes: ["id", "numberSeat", "startDay", "endDay"],
+          attributes: { exclude: ["createdAt", "updatedAt"] },
         },
         {
           model: db.ProcessTour,

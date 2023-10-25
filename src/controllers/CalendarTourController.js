@@ -51,6 +51,35 @@ class CalendarTour {
     }
   }
 
+  async updateRegisteredSeats(req, res) {
+    try {
+      const { registeredSeats, idCalendar } = req.body;
+
+      if (!registeredSeats || !idCalendar) {
+        return res.status(200).json({
+          EM: "Nhập thiếu dữ liệu registeredSeats or idCalendar !!!",
+          EC: -2,
+          DT: [],
+        });
+      }
+
+      const data = await CalendarTourService.updateSeatsRes(req.body);
+
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    } catch (err) {
+      console.log("err <<< ", err);
+      return res.status(500).json({
+        EM: "error server", // error message
+        EC: "-1", // error code
+        DT: "", // data
+      });
+    }
+  }
+
   async update(req, res) {
     return res.json(req.body);
     try {
