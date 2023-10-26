@@ -11,7 +11,6 @@ module.exports = {
       },
       idTour: { type: Sequelize.INTEGER },
       numberSeat: { type: Sequelize.STRING },
-      registeredSeats: { type: Sequelize.STRING }, 
       startDay: { type: Sequelize.DATE },
       endDay: { type: Sequelize.DATE },
 
