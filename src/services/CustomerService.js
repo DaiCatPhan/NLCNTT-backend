@@ -118,6 +118,11 @@ const getCustomerOnlyById = async (id) => {
           include: [
             {
               model: db.Calendar,
+              include: [
+                {
+                  model: db.Tour,
+                },
+              ],
             },
           ],
         },

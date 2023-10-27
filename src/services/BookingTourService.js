@@ -37,6 +37,16 @@ const getTourById = async (idTour) => {
   return Tour;
 };
 
+const getCalendarById = async (idCalendar) => {
+  const Carlendar = await db.Calendar.findOne({
+    where: {
+      id: idCalendar,
+    },
+    raw: true,
+  });
+  return Carlendar;
+};
+
 const getCustomerByEmail = async (emailCus) => {
   const Customer = await db.Customer.findOne({
     where: {
@@ -55,7 +65,7 @@ const prepareTheBill = async (a, b, priceA, priceB) => {
 };
 
 const createBooking = async (rawData) => {
-  const { emailCus, idCalendar, idTour, numberTicketAdult, numberTicketChild } =
+  const { emailCus, idCalendar, numberTicketAdult, numberTicketChild } =
     rawData;
 
   try {
@@ -69,14 +79,22 @@ const createBooking = async (rawData) => {
       };
     }
 
-    let tour = await getTourById(idTour);
+    let calendar = await getCalendarById(idCalendar);
     let customer = await getCustomerByEmail(emailCus);
+
+    if (!calendar || !customer) {
+      return {
+        EM: "calendar or customer không tồn tại",
+        EC: -2,
+        DT: [],
+      };
+    }
 
     const bill = await prepareTheBill(
       numberTicketAdult,
       numberTicketChild,
-      tour?.priceAdult,
-      tour?.priceChild
+      calendar?.priceAdult,
+      calendar?.priceChild
     );
 
     const res = await db.BookingTour.create({
@@ -84,7 +102,7 @@ const createBooking = async (rawData) => {
       idCalendar: idCalendar,
       numberTicketAdult: numberTicketAdult,
       numberTicketChild: numberTicketChild,
-      money: bill.toLocaleString("vi-VN"),
+      money: bill,
     });
 
     if (res) {

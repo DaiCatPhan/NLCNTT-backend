@@ -30,7 +30,8 @@ const isExitCalendar = async (idCalendar) => {
 
 const createCalender = async (rawData) => {
   try {
-    const { idTour, numberSeat, startDay, endDay } = rawData;
+    const { idTour, numberSeat, startDay, endDay, priceAdult, priceChild } =
+      rawData;
 
     const exitTour = await isExitTour(idTour);
     if (!exitTour) {
@@ -46,6 +47,8 @@ const createCalender = async (rawData) => {
       numberSeat: numberSeat,
       startDay: startDay,
       endDay: endDay,
+      priceAdult: priceAdult,
+      priceChild: priceChild,
     });
 
     return {

@@ -8,6 +8,6 @@ router.get("/readUserById", CustomerController.readUserById);
 router.post("/create", CustomerController.create);
 router.post("/findOrCreate", CustomerController.findOrCreate);
 router.put("/update", CustomerController.update);
-router.delete("/delete", CustomerController.delete);
+router.delete("/delete", CustomerController.delete); 
 
 export default router;

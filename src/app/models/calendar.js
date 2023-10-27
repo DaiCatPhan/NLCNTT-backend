@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       idTour: DataTypes.INTEGER,
       numberSeat: DataTypes.STRING,
+      priceAdult: DataTypes.STRING,
+      priceChild: DataTypes.STRING,
       startDay: DataTypes.DATE,
       endDay: DataTypes.DATE,
     },

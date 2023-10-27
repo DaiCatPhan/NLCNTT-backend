@@ -4,20 +4,24 @@ import CalendarTourService from "../services/CalendarTourService";
 class CalendarTour {
   async create(req, res) {
     try {
-      const { idTour, numberSeat, startDay, endDay } = req.body;
-      if (!idTour || !numberSeat || !startDay || !endDay) {
+      const { idTour, numberSeat, startDay, endDay, priceAdult, priceChild } =
+        req.body;
+
+      if (
+        !idTour ||
+        !numberSeat ||
+        !startDay ||
+        !endDay ||
+        !priceAdult ||
+        !priceChild
+      ) {
         return res.status(200).json({
           EM: "Nhập thiếu trường dữ liệu !!!",
           EC: -2,
           DT: [],
         });
       }
-      const data = await CalendarTourService.createCalender({
-        idTour,
-        numberSeat,
-        startDay,
-        endDay,
-      });
+      const data = await CalendarTourService.createCalender(req.body);
 
       return res.status(200).json({
         EM: data.EM,

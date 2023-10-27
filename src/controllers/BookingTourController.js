@@ -3,12 +3,9 @@ import BookingTourService from "../services/BookingTourService";
 
 class BookingTour {
   async create(req, res) {
-    const { idCustomer, idCalendar, numberTicketAdult, numberTicketChild } =
+    const { emailCus, idCalendar, numberTicketAdult, numberTicketChild } =
       req.body;
-
-    if (
-      (!idCustomer || !idCalendar, !numberTicketAdult && !numberTicketChild)
-    ) {
+    if ((!emailCus || !idCalendar, !numberTicketAdult && !numberTicketChild)) {
       return res.status(200).json({
         EM: "Nhập thiếu trường dữ liệu !!!",
         EC: -2,
