@@ -170,11 +170,11 @@ class Customer {
 
   // [GET] /api/v1/customer/readUserById
 
-  async readUserById(req, res) {
-    let idCustomer = +req.query.id;
+  async readUserByEmail(req, res) {
+    let emailCustomer = req.query.email;
 
     try {
-      let data = await CustomerService.getCustomerOnlyById(idCustomer);
+      let data = await CustomerService.getCustomerOnlyByEmail(emailCustomer);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,

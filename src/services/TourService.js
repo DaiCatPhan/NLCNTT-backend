@@ -1,4 +1,5 @@
 import db from "../app/models";
+import BookingTourService from "./BookingTourService";
 
 const checkTourName = async (nameTour) => {
   let tourExit = null;
@@ -166,7 +167,7 @@ const getTour = async (rawData) => {
 const getTourDetailById = async (rawData) => {
   const { id } = rawData;
   try {
-    const dataTour = await db.Tour.findOne({
+    let dataTour = await db.Tour.findOne({
       where: {
         id: id,
       },
@@ -180,11 +181,14 @@ const getTourDetailById = async (rawData) => {
         },
       ],
     });
-    return {
-      EM: "Lấy dữ liệu thành công ",
-      EC: 0,
-      DT: dataTour,
-    };
+
+    if (dataTour) {
+      return {
+        EM: "Lấy dữ liệu thành công ",
+        EC: 0,
+        DT: dataTour,
+      };
+    }
   } catch (error) {
     console.log(">> error", error);
     return {

@@ -1,13 +1,19 @@
 import db from "../app/models";
+const Sequelize = require("sequelize");
 
 const countBookingTourByIdCalendar = async (idCalendar) => {
   try {
-    const count = await db.BookingTour.count({
+    let calendars = await db.BookingTour.findAll({
       where: {
         idCalendar: idCalendar,
       },
+      raw: true,
     });
-    return count;
+    const conutTicket = calendars.reduce((total, calendar) => {
+      return total + +calendar.numberTicketAdult + +calendar.numberTicketChild;
+    }, 0);
+
+    return +conutTicket;
   } catch (error) {
     console.log("error", error);
     return 0;
@@ -17,14 +23,13 @@ const countBookingTourByIdCalendar = async (idCalendar) => {
 const remainingSeats = async (idCalendar) => {
   let countBookingByCalendar = await countBookingTourByIdCalendar(idCalendar);
 
-  const calendarDetail = await db.Calendar.findOne({
+  let calendarDetail = await db.Calendar.findOne({
     where: {
       id: idCalendar,
     },
-    raw: true,
   });
 
-  return (calendarDetail?.numberSeat || 0) - countBookingByCalendar;
+  return (+calendarDetail?.numberSeat || 0) - countBookingByCalendar || 0;
 };
 
 const getTourById = async (idTour) => {
@@ -38,23 +43,24 @@ const getTourById = async (idTour) => {
 };
 
 const getCalendarById = async (idCalendar) => {
-  const Carlendar = await db.Calendar.findOne({
+  const Calendar = await db.Calendar.findOne({
     where: {
       id: idCalendar,
     },
     raw: true,
   });
-  return Carlendar;
+  return Calendar;
 };
 
 const getCustomerByEmail = async (emailCus) => {
-  const Customer = await db.Customer.findOne({
+  const result = await db.Customer.findOne({
     where: {
       email: emailCus,
     },
+    attributes: { exclude: ["password", "createdAt", "updatedAt", "role"] },
     raw: true,
   });
-  return Customer;
+  return result;
 };
 
 const prepareTheBill = async (a, b, priceA, priceB) => {
@@ -70,8 +76,9 @@ const createBooking = async (rawData) => {
 
   try {
     let countConlai = await remainingSeats(idCalendar);
+    let tongVeDat = +numberTicketAdult + +numberTicketChild;
 
-    if (numberTicketAdult + numberTicketChild > countConlai) {
+    if (+tongVeDat > +countConlai) {
       return {
         EM: "Hết chỗ !!!",
         EC: 2,
@@ -191,5 +198,7 @@ const deleteBooking = async (id) => {
 export default {
   createBooking,
   readBooking,
+  remainingSeats,
+  countBookingTourByIdCalendar,
   remainingSeats,
 };

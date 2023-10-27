@@ -106,21 +106,32 @@ const findOrCreate = async (rawData) => {
   }
 };
 
-const getCustomerOnlyById = async (id) => {
+const getCustomerOnlyByEmail = async (email) => {
   try {
     let users = await db.Customer.findOne({
       where: {
-        id: id,
+        email: email,
       },
+      attributes: ["id", "phone", "address", "email", "name", "gender"],
+
       include: [
         {
           model: db.BookingTour,
           include: [
             {
               model: db.Calendar,
+              attributes: { exclude: ["updatedAt", "updatedAt", "createdAt"] },
               include: [
                 {
                   model: db.Tour,
+                  attributes: [
+                    "name",
+                    "type",
+                    "duration",
+                    "domain",
+                    "image",
+                    "vehicle",
+                  ],
                 },
               ],
             },
@@ -287,5 +298,5 @@ const deleteUser = async (id) => {
 export default {
   getCustomerWithPagination,
   findOrCreate,
-  getCustomerOnlyById,
+  getCustomerOnlyByEmail,
 };
