@@ -172,17 +172,39 @@ const getTourDetailById = async (rawData) => {
         id: id,
       },
       include: [
-        {
-          model: db.Calendar,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-        },
+        // {
+        //   model: db.Calendar,
+        //   attributes: { exclude: ["createdAt", "updatedAt"] },
+        // },
         {
           model: db.ProcessTour,
         },
       ],
+      raw: true,
+      nest: true,
     });
 
+    let dataTourCalendar = await db.Calendar.findAll({
+      where: {
+        idTour: id,
+      },
+      raw: true,
+      nest: true,
+    });
+
+    dataTour.Calendars = dataTourCalendar;
+
     if (dataTour) {
+      const handleCalendarPromise = dataTour.Calendars.map(async (item) => {
+        const sochoConali = await BookingTourService.remainingSeats(item.id);
+        return {
+          ...item,
+          remainingSeats: sochoConali,
+        };
+      });
+      const result = await Promise.all(handleCalendarPromise);
+      dataTour.Calendars = result;
+
       return {
         EM: "Lấy dữ liệu thành công ",
         EC: 0,
