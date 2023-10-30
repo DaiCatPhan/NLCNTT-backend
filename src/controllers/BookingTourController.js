@@ -87,7 +87,18 @@ class BookingTour {
   }
 
   async delete(req, res) {
-    return res.json("delete");
+    const { idBookingTour, idCustomer } = req.body;
+
+    if (!idBookingTour || !idCustomer) {
+      return {
+        EM: "Nhập thiếu dữ liệu !!!!",
+        EC: -2,
+        DT: [],
+      };
+    }
+
+    const data = await BookingTourService.deleteBooking(req.body);
+
     try {
       return res.status(200).json({
         EM: data.EM,

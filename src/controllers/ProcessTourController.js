@@ -11,7 +11,7 @@ class ProcessTour {
         EM: "Nhập thiếu trường dữ liệu !!!",
         EC: -2,
         DT: [],
-      }); 
+      });
     }
 
     const data = await ProcessTourService.createProcessTour({
@@ -84,7 +84,7 @@ class ProcessTour {
       !descriptionTEXT
     ) {
       return res.status(200).json({
-        EM: "Nhập thiếu dữ liệu ",
+        EM: "Nhập thiếu dữ liệu or chưa tạo chương trình . Không thể cập nhật !!!",
         EC: -3,
         DT: [],
       });

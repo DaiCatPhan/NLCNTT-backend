@@ -166,7 +166,7 @@ const readAllBooking = async (id) => {
     return {
       EM: "Loi server !!!",
       EC: -5,
-      DT: data,
+      DT: [],
     };
   }
 };
@@ -178,19 +178,58 @@ const updateBooking = async (rawData) => {
     return {
       EM: "Loi server !!!",
       EC: -5,
-      DT: data,
+      DT: [],
     };
   }
 };
 
-const deleteBooking = async (id) => {
+const exitBookingTour = async (id) => {
+  let isExits = await db.BookingTour.findOne({
+    where: {
+      id: id,
+    },
+  });
+
+  if (isExits) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const deleteBooking = async (rawData) => {
+  const { idBookingTour, idCustomer } = rawData;
   try {
+    const isExitBooking =await exitBookingTour(idBookingTour);
+
+    if (!isExitBooking) {
+      return {
+        EM: "Lịch đã đặt không tồn tại",
+        EC: -1,
+        DT: [],
+      };
+    }
+
+    console.log("isExitBooking", isExitBooking);
+
+    const data = await db.BookingTour.destroy({
+      where: {
+        id: +idBookingTour,
+        idCustomer: +idCustomer,
+      },
+    });
+
+    return {
+      EM: "Xóa lịch trình thành công",
+      EC: 0,
+      DT: data,
+    };
   } catch (err) {
     console.log(">> loi", err);
     return {
       EM: "Loi server !!!",
       EC: -5,
-      DT: data,
+      DT: [],
     };
   }
 };
@@ -201,4 +240,5 @@ export default {
   remainingSeats,
   countBookingTourByIdCalendar,
   remainingSeats,
+  deleteBooking,
 };
