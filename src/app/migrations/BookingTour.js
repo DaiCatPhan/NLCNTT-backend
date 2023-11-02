@@ -14,6 +14,7 @@ module.exports = {
       numberTicketAdult: { type: Sequelize.STRING },
       numberTicketChild: { type: Sequelize.STRING },
       money: { type: Sequelize.STRING },
+      status: { type: Sequelize.STRING },
 
       createdAt: { type: Sequelize.DATE },
       updatedAt: { type: Sequelize.DATE },

@@ -110,6 +110,7 @@ const createBooking = async (rawData) => {
       numberTicketAdult: numberTicketAdult,
       numberTicketChild: numberTicketChild,
       money: bill,
+      status: "0",
     });
 
     if (res) {
@@ -200,7 +201,7 @@ const exitBookingTour = async (id) => {
 const deleteBooking = async (rawData) => {
   const { idBookingTour, idCustomer } = rawData;
   try {
-    const isExitBooking =await exitBookingTour(idBookingTour);
+    const isExitBooking = await exitBookingTour(idBookingTour);
 
     if (!isExitBooking) {
       return {

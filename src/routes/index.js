@@ -5,8 +5,12 @@ import calendarTourRouter from "./calendarTour";
 import processTourRouter from "./processTour";
 import customerRouter from "./customer";
 import bookingTourRouter from "./bookingTour";
+import StatisticalRouter from "./statistical";
 
 function route(app) {
+  // StatisticalRouter
+  app.use("/api/v1/statistical", StatisticalRouter);
+
   // bookingTourRouter
   app.use("/api/v1/booking", bookingTourRouter);
 
