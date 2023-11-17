@@ -130,12 +130,27 @@ const createBooking = async (rawData) => {
   }
 };
 
+const getIDUser = async (Email) => {
+  const data = await db.Customer.findOne({
+    where: {
+      email: Email,
+    },
+  });
+  if (data) {
+    return data.id;
+  }
+};
+
 const readBooking = async (rawData) => {
   try {
-    const { idCustomer, status } = rawData;
-    const data = await db.BookingTour.findAll({
+    const { idCustomer, status, page = 1, limit = 5 } = rawData;
+    let offset = (page - 1) * +limit;
+
+    const id = await getIDUser(idCustomer);
+
+    const { count, rows } = await db.BookingTour.findAndCountAll({
       where: {
-        idCustomer: idCustomer,
+        idCustomer: id,
         status: status,
       },
       include: [
@@ -143,7 +158,14 @@ const readBooking = async (rawData) => {
         { model: db.Calendar, include: { model: db.Tour } },
       ],
       order: [["updatedAt", "DESC"]],
+      offset: +offset,
+      limit: +limit,
     });
+
+    let data = {
+      totalRows: count,
+      users: rows,
+    };
 
     if (data) {
       return {
