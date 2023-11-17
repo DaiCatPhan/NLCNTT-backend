@@ -8,4 +8,4 @@ router.get("/read", BookingTourController.read);
 router.get("/readAll", BookingTourController.readAll);
 router.delete("/delete", BookingTourController.delete);
 
-export default router;
+export default router; 

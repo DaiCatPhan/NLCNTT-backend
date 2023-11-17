@@ -132,15 +132,17 @@ const createBooking = async (rawData) => {
 
 const readBooking = async (rawData) => {
   try {
-    const { idCustomer } = rawData;
+    const { idCustomer, status } = rawData;
     const data = await db.BookingTour.findAll({
       where: {
         idCustomer: idCustomer,
+        status: status,
       },
       include: [
         { model: db.Customer },
         { model: db.Calendar, include: { model: db.Tour } },
       ],
+      order: [["updatedAt", "DESC"]],
     });
 
     if (data) {
@@ -160,8 +162,36 @@ const readBooking = async (rawData) => {
   }
 };
 
-const readAllBooking = async (id) => {
+const readAllBooking = async (rawData) => {
   try {
+    const { status, page = 1, limit = 5 } = rawData;
+    let offset = (page - 1) * +limit;
+
+    const { count, rows } = await db.BookingTour.findAndCountAll({
+      where: {
+        status: status,
+      },
+      include: [
+        { model: db.Customer },
+        { model: db.Calendar, include: { model: db.Tour } },
+      ],
+      order: [["updatedAt", "DESC"]],
+      offset: +offset,
+      limit: +limit,
+    });
+
+    let data = {
+      totalRows: count,
+      users: rows,
+    };
+
+    if (data) {
+      return {
+        EM: "Lấy dữ liệu thành công ",
+        EC: 0,
+        DT: data,
+      };
+    }
   } catch (err) {
     console.log(">> loi", err);
     return {
@@ -173,7 +203,31 @@ const readAllBooking = async (id) => {
 };
 
 const updateBooking = async (rawData) => {
+  const { idBookingTour, status } = rawData;
   try {
+    const exit = await exitBookingTour(idBookingTour);
+    if (!exit) {
+      return {
+        EM: "Không tìm thấy id bookingTour !!!",
+        EC: -2,
+        DT: [],
+      };
+    }
+
+    const data = await db.BookingTour.update(
+      { status: status },
+      {
+        where: {
+          id: idBookingTour,
+        },
+      }
+    );
+
+    return {
+      EM: "Cập nhật dữ liệu thành công",
+      EC: 0,
+      DT: data,
+    };
   } catch (err) {
     console.log(">> loi", err);
     return {
@@ -242,4 +296,6 @@ export default {
   countBookingTourByIdCalendar,
   remainingSeats,
   deleteBooking,
+  readAllBooking,
+  updateBooking,
 };

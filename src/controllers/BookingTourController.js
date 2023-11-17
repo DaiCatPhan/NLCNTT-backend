@@ -32,9 +32,17 @@ class BookingTour {
   }
 
   async read(req, res) {
-    const { idCustomer } = req.query;
-    const data = await BookingTourService.readBooking({ idCustomer });
+    const { idCustomer, status } = req.query;
+    if (!idCustomer || !status) {
+      return res.status(200).json({
+        EM: "Thiếu dữ liệu !!!",
+        EC: -2,
+        DT: [],
+      });
+    }
+
     try {
+      const data = await BookingTourService.readBooking(req.query);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,
@@ -51,8 +59,17 @@ class BookingTour {
   }
 
   async readAll(req, res) {
-    return res.json("readAll");
+    const { status } = req.query;
+    if (!status) {
+      return res.status(200).json({
+        EM: "Thiếu dữ liệu !!!",
+        EC: -2,
+        DT: [],
+      });
+    }
+
     try {
+      const data = await BookingTourService.readAllBooking(req.query);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,
@@ -61,16 +78,24 @@ class BookingTour {
     } catch (err) {
       console.log("err <<< ", err);
       return res.status(500).json({
-        EM: "error server", // error message
-        EC: "-1", // error code
-        DT: "", // data
+        EM: "error server",
+        EC: "-5",
+        DT: "",
       });
     }
   }
 
   async update(req, res) {
-    return res.json("update");
+    const { idBookingTour, status } = req.body;
+    if (!idBookingTour || !status) {
+      return res.status(200).json({
+        EM: "Nhập thiếu dữ liệu",
+        EC: -2,
+        DT: [],
+      });
+    }
     try {
+      const data = await BookingTourService.updateBooking(req.body);
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,
