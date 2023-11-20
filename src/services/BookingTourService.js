@@ -311,6 +311,69 @@ const deleteBooking = async (rawData) => {
   }
 };
 
+const revenueTour = async (rawData) => {
+  const { month } = rawData;
+  try {
+    let tourList = await db.Tour.findAll({});
+    let booking = await db.BookingTour.findAll({
+      include: [{ model: db.Calendar, include: { model: db.Tour } }],
+    });
+
+    let monthlyRevenue = Array.from(tourList, (tour) => ({
+      idTour: tour.id,
+      monthly: Array(12).fill(0), // Sử dụng mảng này để lưu doanh thu theo từng tháng
+      total: 0, // Tổng doanh thu của tour
+    }));
+
+    tourList.map((tour) => {
+      let index = monthlyRevenue.findIndex((item) => item.idTour === tour.id);
+
+      if (index === -1) {
+        monthlyRevenue.push({
+          idTour: tour.id,
+          monthly: Array(12).fill(0),
+          total: 0,
+        });
+        index = monthlyRevenue.length - 1;
+      }
+
+      booking.map((bookingItem) => {
+        if (tour.id === bookingItem.Calendar.Tour.id) {
+          const monthIndex = new Date(bookingItem.createdAt).getMonth();
+          const revenue = parseFloat(bookingItem.money);
+
+          monthlyRevenue[index].monthly[monthIndex] += revenue;
+          monthlyRevenue[index].total += revenue;
+        }
+      });
+    });
+
+    // Lấy doanh thu của từng tour trong tháng 1
+    const revenuePerTourMonth = monthlyRevenue.map((tour) => ({
+      idTour: tour.idTour,
+      revenueMonth1: tour.monthly[`${month}`],
+    }));
+
+    console.log(
+      "Doanh thu của từng tour trong tháng " + month + ":",
+      revenuePerTourMonth
+    );
+
+    return {
+      EM: "Lấy dữ liệu thành công",
+      EC: 0,
+      DT: revenuePerTourMonth,
+    };
+  } catch (error) {
+    console.error("Lỗi:", error);
+    return {
+      EM: "Lấy dữ liệu thất bại",
+      EC: 1,
+      DT: null,
+    };
+  }
+};
+
 export default {
   createBooking,
   readBooking,
@@ -320,4 +383,5 @@ export default {
   deleteBooking,
   readAllBooking,
   updateBooking,
+  revenueTour,
 };

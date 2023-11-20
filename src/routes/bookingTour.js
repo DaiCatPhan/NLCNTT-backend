@@ -7,5 +7,6 @@ router.put("/update", BookingTourController.update);
 router.get("/read", BookingTourController.read);
 router.get("/readAll", BookingTourController.readAll);
 router.delete("/delete", BookingTourController.delete);
+router.get("/revenue", BookingTourController.revenue);
 
 export default router; 
