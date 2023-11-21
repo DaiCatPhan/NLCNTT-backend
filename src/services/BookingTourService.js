@@ -355,11 +355,19 @@ const revenueTour = async (rawData) => {
       revenueMonth: tour.monthly[`${month}`],
     }));
 
-    return {
-      EM: "Lấy dữ liệu thành công",
-      EC: 0,
-      DT: revenuePerTourMonth,
-    };
+    if (month) {
+      return {
+        EM: "Lấy dữ liệu thành công",
+        EC: 0,
+        DT: revenuePerTourMonth,
+      };
+    } else {
+      return {
+        EM: "Lấy dữ liệu thành công",
+        EC: 0,
+        DT: monthlyRevenue,
+      };
+    }
   } catch (error) {
     console.error("Lỗi:", error);
     return {
