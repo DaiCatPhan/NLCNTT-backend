@@ -320,6 +320,7 @@ const revenueTour = async (rawData) => {
     });
 
     let monthlyRevenue = Array.from(tourList, (tour) => ({
+      tour: tour,
       idTour: tour.id,
       monthly: Array(12).fill(0), // Sử dụng mảng này để lưu doanh thu theo từng tháng
       total: 0, // Tổng doanh thu của tour
@@ -348,16 +349,11 @@ const revenueTour = async (rawData) => {
       });
     });
 
-    // Lấy doanh thu của từng tour trong tháng 1
+    // Lấy doanh thu của từng tour trong tháng bất kì
     const revenuePerTourMonth = monthlyRevenue.map((tour) => ({
-      idTour: tour.idTour,
-      revenueMonth1: tour.monthly[`${month}`],
+      tour: tour.tour,
+      revenueMonth: tour.monthly[`${month}`],
     }));
-
-    console.log(
-      "Doanh thu của từng tour trong tháng " + month + ":",
-      revenuePerTourMonth
-    );
 
     return {
       EM: "Lấy dữ liệu thành công",
@@ -368,8 +364,8 @@ const revenueTour = async (rawData) => {
     console.error("Lỗi:", error);
     return {
       EM: "Lấy dữ liệu thất bại",
-      EC: 1,
-      DT: null,
+      EC: -5,
+      DT: [],
     };
   }
 };
