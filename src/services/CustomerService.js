@@ -28,7 +28,7 @@ const getInfoUserById = async (userEmail) => {
   return user;
 };
 
-const getCustomerWithPagination = async ({ page = 1, limit = 3 }) => {
+const getCustomerWithPagination = async ({ page = 1, limit = 5 }) => {
   try {
     let offset = (page - 1) * limit;
 

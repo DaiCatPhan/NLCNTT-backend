@@ -36,22 +36,16 @@ class Customer {
   // [GET] /api/v1/customer/readPanigation
 
   async readPanigation(req, res) {
-    return res.json("hi");
     try {
-      if (req.query.page && req.query.limit) {
-        let page = +req.query.page;
-        let limit = +req.query.limit;
+      let page = +req.query.page;
+      let limit = +req.query.limit;
 
-        let data = await CustomerService.getCustomerWithPagination({
-          page,
-          limit,
-        });
-        return res.status(200).json({
-          EM: data.EM,
-          EC: data.EC,
-          DT: data.DT,
-        });
-      }
+      let data = await CustomerService.getCustomerWithPagination(req.query);
+      return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
     } catch (err) {
       console.log("err <<< ", err);
       return res.status(500).json({
