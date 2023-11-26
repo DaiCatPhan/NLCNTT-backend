@@ -130,6 +130,24 @@ const delete_Calendar = async (rawData) => {
   try {
     const { idCalendar } = rawData;
 
+    // Kiểm tra cái lịch đó đã có ai đăng ký chưa , nếu chưa thì mới cho xóa
+
+    const exitsRegister_calendar = await db.BookingTour.findOne({
+      where: {
+        idCalendar: idCalendar,
+      },
+    });
+
+    if (exitsRegister_calendar) {
+      return {
+        EM: "Lịch đã có người đăng ký không thể xóa được !!! ",
+        EC: -2,
+        DT: [],
+      };
+    }
+
+    // Kiểm tra cái lịch đó có tồn tại hay không nửa
+
     const exitCalendar = await isExitCalendar(idCalendar);
     if (!exitCalendar) {
       return {
@@ -138,6 +156,8 @@ const delete_Calendar = async (rawData) => {
         DT: [],
       };
     }
+
+    // Xóa lịch
 
     const deleted = await db.Calendar.destroy({
       where: {
