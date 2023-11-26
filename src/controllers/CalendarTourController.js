@@ -102,8 +102,19 @@ class CalendarTour {
     }
   }
 
+
+  // [DELETE] /api/v1/calendar/delete
   async delete(req, res) {
+    if (!req.body.idCalendar) {
+      return res.status(200).json({
+        EM: "Chưa có id Lịch để xóa",
+        EC: -2,
+        DT: [],
+      });
+    }
     try {
+      const data = await CalendarTourService.delete_Calendar(req.body);
+
       return res.status(200).json({
         EM: data.EM,
         EC: data.EC,

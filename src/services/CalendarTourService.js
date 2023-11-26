@@ -126,30 +126,29 @@ const updateSeatsRes = async (rawData) => {
   }
 };
 
-const readCalendar = async (rawData) => {
+const delete_Calendar = async (rawData) => {
   try {
-    const { idTour, numberSeat, startDay, endDay } = rawData;
+    const { idCalendar } = rawData;
 
-    const exitTour = await isExitTour(idTour);
-    if (!exitTour) {
+    const exitCalendar = await isExitCalendar(idCalendar);
+    if (!exitCalendar) {
       return {
-        EM: "Tour không tồn tại !!! ",
+        EM: "Lịch không tồn tại !!! ",
         EC: -2,
         DT: [],
       };
     }
 
-    const dataCalendar = await db.Calendar.create({
-      idTour: idTour,
-      numberSeat: numberSeat,
-      startDay: startDay,
-      endDay: endDay,
+    const deleted = await db.Calendar.destroy({
+      where: {
+        id: idCalendar,
+      },
     });
 
     return {
-      EM: "Tạo lịch thành công ",
+      EM: "Xóa lịch thành công ",
       EC: 0,
-      DT: dataCalendar,
+      DT: deleted,
     };
   } catch (error) {
     console.log(">> error", error);
@@ -164,4 +163,5 @@ const readCalendar = async (rawData) => {
 export default {
   createCalender,
   updateSeatsRes,
+  delete_Calendar,
 };
