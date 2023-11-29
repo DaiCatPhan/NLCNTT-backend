@@ -224,6 +224,7 @@ const getTourDetailById = async (rawData) => {
 const getAllTourDetail = async () => {
   const data = await db.Tour.findAll({
     include: [{ model: db.Calendar }, { model: db.ProcessTour }],
+    order: [["createdAt", "DESC"]],
   });
 
   return {
@@ -300,6 +301,7 @@ const getTourWithPagination = async ({ page = 1, limit = 3 }) => {
     const { count, rows } = await db.Tour.findAndCountAll({
       offset: offset,
       limit: limit,
+      order: [["createdAt", "DESC"]],
     });
     let data = {
       totalRows: count,

@@ -317,6 +317,9 @@ const revenueTour = async (rawData) => {
     let tourList = await db.Tour.findAll({});
     let booking = await db.BookingTour.findAll({
       include: [{ model: db.Calendar, include: { model: db.Tour } }],
+      // where: {
+      //   status: "1",
+      // },
     });
 
     let monthlyRevenue = Array.from(tourList, (tour) => ({
@@ -327,9 +330,9 @@ const revenueTour = async (rawData) => {
     }));
 
     tourList.map((tour) => {
-      let index = monthlyRevenue.findIndex((item) => item.idTour === tour.id);
+      let index = monthlyRevenue.findIndex((item) => item.idTour == tour.id);
 
-      if (index === -1) {
+      if (index == -1) {
         monthlyRevenue.push({
           idTour: tour.id,
           monthly: Array(12).fill(0),
@@ -339,14 +342,35 @@ const revenueTour = async (rawData) => {
       }
 
       booking.map((bookingItem) => {
-        if (tour.id === bookingItem.Calendar.Tour.id) {
-          const monthIndex = new Date(bookingItem.createdAt).getMonth();
+        if (tour.id == bookingItem.Calendar.Tour.id) {
+          const monthIndex = new Date(bookingItem.Calendar.startDay).getMonth();
           const revenue = parseFloat(bookingItem.money);
 
           monthlyRevenue[index].monthly[monthIndex] += revenue;
           monthlyRevenue[index].total += revenue;
         }
       });
+
+      // booking.map((bookingItem) => {
+      //   if (tour.id === bookingItem.Calendar.Tour.id) {
+      //     const bookingMonth = new Date(
+      //       bookingItem.Calendar.startDay
+      //     ).getMonth();
+      //     const revenue = parseFloat(bookingItem.money);
+
+      //     // Kiểm tra nếu tháng trong dữ liệu đặt tour không khớp với tháng hiện tại
+      //     if (month !== undefined && bookingMonth !== month - 1) {
+      //       // Nếu không khớp, cộng dồn doanh thu vào cả tháng hiện tại
+      //       monthlyRevenue[index].monthly[month - 1] += revenue;
+      //     } else {
+      //       // Nếu khớp, cộng dồn doanh thu vào tháng tương ứng
+      //       monthlyRevenue[index].monthly[bookingMonth] += revenue;
+      //     }
+
+      //     // Cộng dồn doanh thu tổng
+      //     monthlyRevenue[index].total += revenue;
+      //   }
+      // });
     });
 
     // Lấy doanh thu của từng tour trong tháng bất kì

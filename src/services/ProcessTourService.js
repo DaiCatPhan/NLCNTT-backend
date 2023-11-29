@@ -224,6 +224,7 @@ const getProcessTourWithPagination = async ({ page = 1, limit = 3 }) => {
       },
       offset: offset,
       limit: limit,
+      order: [["createdAt", "DESC"]],
     });
 
     let data = {
