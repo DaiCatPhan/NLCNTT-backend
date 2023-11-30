@@ -317,9 +317,9 @@ const revenueTour = async (rawData) => {
     let tourList = await db.Tour.findAll({});
     let booking = await db.BookingTour.findAll({
       include: [{ model: db.Calendar, include: { model: db.Tour } }],
-      // where: {
-      //   status: "1",
-      // },
+      where: {
+        status: "1",
+      },
     });
 
     let monthlyRevenue = Array.from(tourList, (tour) => ({
